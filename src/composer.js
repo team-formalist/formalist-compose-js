@@ -1,7 +1,7 @@
-import Immutable from "immutable"
-import { createStore } from "redux"
-import compiler from "./compiler"
-import reducer from "./reducer"
+import Immutable from 'immutable'
+import { createStore } from 'redux'
+import compiler from './compiler'
+import reducer from './reducer'
 
 /**
  * Composes forms from the passed `config`. Returning a function that can
@@ -17,11 +17,11 @@ import reducer from "./reducer"
  */
 export default (config) => {
   return (initialState) => {
-    var immutableState = Immutable.fromJS(initialState);
-    var store = createStore(formReducer, immutableState);
+    var immutableState = Immutable.fromJS(initialState)
+    var store = createStore(reducer, immutableState)
     return {
       render: () => {
-        return compiler(store, config);
+        return compiler(store, config)
       },
       store: store
     }

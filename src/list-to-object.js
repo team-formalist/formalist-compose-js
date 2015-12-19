@@ -1,4 +1,4 @@
-import Immutable, { List } from "immutable"
+import { List } from 'immutable'
 
 /**
  * Turn a ImmutableList of [key,value] pairs into a object {key: value}
@@ -8,8 +8,8 @@ import Immutable, { List } from "immutable"
  * @return {Object}
  */
 
-export default function listToObject(list) {
-  if (!list || !List.isList(list) return
+export default function listToObject (list) {
+  if (!list || !List.isList(list)) return false
   var result = {}
   list.forEach((key) => {
     result[key.get(0)] = key.get(1)

@@ -1,4 +1,4 @@
-import schemaMapping from "./schema-mapping"
+import schemaMapping from './schema-mapping'
 
 /**
  * TODO: Very much a WIP
@@ -15,7 +15,7 @@ import schemaMapping from "./schema-mapping"
  */
 export default (state, action) => {
   switch (action.type) {
-    case "UPDATE_FIELD":
+    case 'UPDATE_FIELD':
       var path = action.payload.path.concat(
         [schemaMapping.fields.value]
       )
