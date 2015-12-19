@@ -21,7 +21,7 @@
     "compile": "./node_modules/.bin/babel --presets es2015 src --out-dir lib",
     "prepublish": "npm run compile",
     "test": "./node_modules/.bin/babel-node --presets es2015 test | faucet",
-    "posttest": "eslint *.js test/*.js test/**/*.js"
+    "posttest": "eslint src/*.js src/**/*.js test/*.js test/**/*.js"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
