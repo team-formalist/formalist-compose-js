@@ -1,5 +1,6 @@
 import test from 'tape'
 import composeForm from '../lib'
+import composeForm from '../src'
 import { List } from 'immutable'
 import dataSimple from './fixtures/data-simple'
 import textForm from './fixtures/text-form'
