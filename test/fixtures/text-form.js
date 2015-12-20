@@ -11,7 +11,7 @@ const Section = ({name, children}) => {
 }
 
 const Field = ({name, value, config, path, store}) => {
-  return [`field:${name}-${value}`]
+  return [`field:${name}-${value}-${path.join()}`]
 }
 
 export default {

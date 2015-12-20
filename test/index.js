@@ -70,7 +70,7 @@ test('it should render a form', (nest) => {
   let form = formTemplate(dataSimple)
   nest.test('... matching the structure in the data', (assert) => {
     let renderedForm = form.render()
-    let expected = 'field:field-one-name-123,field:field-two-name-Title goes here,start-section:Main section,field:field-three-name-321,field:field-four-name-Content goes here,end-section:Main section'
+    let expected = 'field:field-one-name-123-0,1,field:field-two-name-Title goes here-1,1,start-section:Main section,field:field-three-name-321-2,1,1,0,1,field:field-four-name-Content goes here-2,1,1,1,1,end-section:Main section'
     assert.equals(renderedForm.join(), expected)
     assert.end()
   })
