@@ -1,5 +1,5 @@
 import test from 'tape'
-import composeForm from '../lib'
+import schemaMapping from '../src/schema-mapping'
 import composeForm from '../src'
 import { List } from 'immutable'
 import dataSimple from './fixtures/data-simple'
@@ -72,6 +72,29 @@ test('it should render a form', (nest) => {
     let renderedForm = form.render()
     let expected = 'field:field-one-name-123-0,1,field:field-two-name-Title goes here-1,1,start-section:Main section,field:field-three-name-321-2,1,1,0,1,field:field-four-name-Content goes here-2,1,1,1,1,end-section:Main section'
     assert.equals(renderedForm.join(), expected)
+    assert.end()
+  })
+})
+
+test('it should update data', (nest) => {
+  let formTemplate = composeForm(textForm)
+  let form = formTemplate(dataSimple)
+
+  nest.test('... through the redux dispatcher', (assert) => {
+    let fieldPath = [0, 1]
+    let expectedValue = 'Updated value'
+    form.store.dispatch({
+      type: 'UPDATE_FIELD',
+      payload: {
+        path: fieldPath,
+        value: function (val) { return expectedValue }
+      }
+    })
+    let list = form.store.getState()
+    let updatedValue = list.getIn(
+      fieldPath.concat([schemaMapping.field.value])
+    )
+    assert.equals(updatedValue, expectedValue)
     assert.end()
   })
 })
