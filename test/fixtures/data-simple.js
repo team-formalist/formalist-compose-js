@@ -2,7 +2,7 @@ const simple = [
   [
     'field',
     [
-      'id',
+      'field-one-name',
       'text',
       123,
       []
@@ -11,10 +11,36 @@ const simple = [
   [
     'field',
     [
-      'title',
+      'field-two-name',
       'text',
       'Title goes here',
       []
+    ]
+  ],
+  [
+    'section',
+    [
+      'Main section',
+      [
+        [
+          'field',
+          [
+            'field-three-name',
+            'text',
+            321,
+            []
+          ]
+        ],
+        [
+          'field',
+          [
+            'field-four-name',
+            'text',
+            'Content goes here',
+            []
+          ]
+        ]
+      ]
     ]
   ]
 ]
