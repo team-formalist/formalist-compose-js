@@ -15,7 +15,7 @@ import reducer from './reducer'
  *
  * @return {Object}
  */
-export default (config) => {
+export default function composer (config) {
   return (initialState) => {
     var immutableState = Immutable.fromJS(initialState)
     var store = createStore(reducer, immutableState)

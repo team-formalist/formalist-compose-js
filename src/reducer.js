@@ -13,7 +13,7 @@ import schemaMapping from './schema-mapping'
  *
  * @return {ImmutableList} The modified state.
  */
-export default (state, action) => {
+export default function reducer (state, action) {
   switch (action.type) {
     case 'UPDATE_FIELD':
       var fieldPath = action.payload.path.concat([schemaMapping.field.value])

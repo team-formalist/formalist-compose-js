@@ -20,7 +20,7 @@ import schemaMapping from './schema-mapping'
  *
  * @return {Array} An array representing the compiled form
  */
-export default (store, formConfig) => {
+export default function compiler (store, formConfig) {
   /**
    * Called for each node in the abstract syntax tree (AST) that makes up the
    * state contained in the store. We identify the node by `type`
