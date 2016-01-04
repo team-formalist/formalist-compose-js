@@ -20,8 +20,9 @@
   "scripts": {
     "compile": "./node_modules/.bin/babel --presets ./node_modules/babel-preset-es2015 src --out-dir lib",
     "prepublish": "npm run compile",
-    "posttest": "eslint src/*.js src/**/*.js test/*.js test/**/*.js"
     "test": "./node_modules/.bin/babel-node --presets ./node_modules/babel-preset-es2015 test | faucet",
+    "lint": "eslint src/*.js src/**/*.js test/*.js test/**/*.js",
+    "posttest": "npm run lint"
   },
   "devDependencies": {
     "babel-cli": "^6.3.17",
