@@ -4,6 +4,7 @@ import composeForm from '../src'
 import { List } from 'immutable'
 import dataSimple from './fixtures/data-simple'
 import textForm from './fixtures/text-form'
+import * as fieldActions from '../src/actions/fields'
 
 const isFunction = function (obj) {
   return typeof obj === 'function'
@@ -17,6 +18,7 @@ test('it should compose a form template', (nest) => {
     assert.end()
   })
 })
+
 test('it should create a form instance from a composed template', (nest) => {
   let formTemplate = composeForm({})
   let form = formTemplate()
@@ -83,13 +85,12 @@ test('it should update data', (nest) => {
   nest.test('... through the redux dispatcher', (assert) => {
     let fieldPath = [0, 1]
     let expectedValue = 'Updated value'
-    form.store.dispatch({
-      type: 'UPDATE_FIELD',
-      payload: {
-        path: fieldPath,
-        value: function (val) { return expectedValue }
-      }
-    })
+    form.store.dispatch(
+      fieldActions.editField(
+        fieldPath,
+        function (val) { return expectedValue }
+      )
+    )
     let list = form.store.getState()
     let updatedValue = list.getIn(
       fieldPath.concat([schemaMapping.field.value])

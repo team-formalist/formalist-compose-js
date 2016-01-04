@@ -1,4 +1,5 @@
 import schemaMapping from './schema-mapping'
+import { DELETE_FIELD, EDIT_FIELD } from './constants/action-types'
 
 /**
  * TODO: Very much a WIP
@@ -9,16 +10,17 @@ import schemaMapping from './schema-mapping'
  * @param  {ImmutableList} state The state of the form as returned by Redux.
  * The state is expected to be a `List` in Immutable.js
  *
- * @param  {Object} action A flux-compatible action.
+ * @param  {Object} action A redux-compatible action.
  *
  * @return {ImmutableList} The modified state.
  */
 export default function reducer (state, action) {
   switch (action.type) {
-    case 'UPDATE_FIELD':
-      var fieldPath = action.payload.path.concat([schemaMapping.field.value])
-      return state.updateIn(fieldPath, action.payload.value)
-    // ... a whole bunch of actions go here
+    case DELETE_FIELD:
+      return state.deleteIn(action.path)
+    case EDIT_FIELD:
+      var valuePath = action.path.concat([schemaMapping.field.value])
+      return state.updateIn(valuePath, action.value)
     default:
       return state
   }
