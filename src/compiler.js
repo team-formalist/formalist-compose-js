@@ -80,7 +80,7 @@ export default function compiler (store, formConfig) {
       }
       return (
         Field({
-          key: path,
+          key: path.hashCode(),
           path: path,
           store: store,
           name: name,
