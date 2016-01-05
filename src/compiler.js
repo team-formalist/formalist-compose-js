@@ -75,6 +75,7 @@ export default function compiler (store, formConfig) {
       let type = definition.get(schemaMapping.field.type)
       let value = definition.get(schemaMapping.field.value)
       let config = definition.get(schemaMapping.field.config)
+      let errors = definition.get(schemaMapping.field.errors)
       let Field = formConfig.fields[type]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -86,7 +87,8 @@ export default function compiler (store, formConfig) {
           store: store,
           name: name,
           value: value,
-          config: listToObject(config)
+          config: listToObject(config),
+          errors: (errors) ? errors.map(listToObject) : null
         })
       )
     },

@@ -13,7 +13,8 @@ const schemaMapping = {
     name: 0,
     type: 1,
     value: 2,
-    config: 3
+    config: 3,
+    errors: 4
   },
   attr: {
     name: 0,
