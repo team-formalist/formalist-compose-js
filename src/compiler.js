@@ -85,6 +85,7 @@ export default function compiler (store, formConfig) {
           key: key,
           path: path,
           store: store,
+          type: type,
           name: name,
           value: value,
           config: listToObject(config),
