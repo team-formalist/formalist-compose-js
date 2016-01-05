@@ -70,7 +70,7 @@ export default function compiler (store, formConfig) {
      * @return {Function} Result of the relevant `fields[type]` function
      */
     visitField (path, definition, index) {
-      let key = `${path.hashCode()}-${index}`
+      let key = path.hashCode()
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
       let value = definition.get(schemaMapping.field.value)
