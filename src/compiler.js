@@ -70,6 +70,7 @@ export default function compiler (store, formConfig) {
      * @return {Function} Result of the relevant `fields[type]` function
      */
     visitField (path, definition, index) {
+      let key = `${path.hashCode()}-${index}`
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
       let value = definition.get(schemaMapping.field.value)
@@ -80,7 +81,7 @@ export default function compiler (store, formConfig) {
       }
       return (
         Field({
-          key: path.hashCode(),
+          key: key,
           path: path,
           store: store,
           name: name,
@@ -123,6 +124,7 @@ export default function compiler (store, formConfig) {
      * (including the result of its children)
      */
     visitMany (path, definition) {
+      let key = path.hashCode()
       let name = definition.get(schemaMapping.many.name)
       let contents = definition.get(schemaMapping.many.contents)
       path = path.push(schemaMapping.many.contents)
@@ -135,7 +137,7 @@ export default function compiler (store, formConfig) {
       }
       return (
         Many({
-          key: path.hashCode(),
+          key: key,
           name: name,
           children: children
         })
@@ -158,6 +160,7 @@ export default function compiler (store, formConfig) {
      * config (including the result of its children)
      */
     visitSection (path, definition) {
+      let key = path.hashCode()
       let name = definition.get(schemaMapping.section.name)
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
@@ -168,7 +171,7 @@ export default function compiler (store, formConfig) {
       }
       return (
         Section({
-          key: path.hashCode(),
+          key: key,
           name: name,
           children: children.map(visit.bind(this, path))
         })
@@ -190,6 +193,7 @@ export default function compiler (store, formConfig) {
      * config (including the result of its children)
      */
     visitGroup (path, definition) {
+      let key = path.hashCode()
       let contents = definition
       if (!contents) return
       let children = contents.map((content, index) => {
@@ -201,7 +205,7 @@ export default function compiler (store, formConfig) {
       }
       return (
         Group({
-          key: path.hashCode(),
+          key: key,
           children: children
         })
       )
