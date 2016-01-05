@@ -19,8 +19,7 @@ export default {
   many: Many,
   section: Section,
   fields: {
-    text: Field,
-    image: Field,
-    time: Field
+    string: Field,
+    int: Field
   }
 }
