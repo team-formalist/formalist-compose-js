@@ -5,6 +5,7 @@ const simple = [
       'field-one-name',
       'int',
       123,
+      [],
       []
     ]
   ],
@@ -14,6 +15,7 @@ const simple = [
       'field-two-name',
       'string',
       'Title goes here',
+      [],
       []
     ]
   ],
@@ -28,6 +30,7 @@ const simple = [
             'field-three-name',
             'string',
             321,
+            [],
             []
           ]
         ],
@@ -37,6 +40,7 @@ const simple = [
             'field-four-name',
             'string',
             'Content goes here',
+            [],
             []
           ]
         ]

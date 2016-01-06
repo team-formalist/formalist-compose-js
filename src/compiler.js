@@ -74,8 +74,8 @@ export default function compiler (store, formConfig) {
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
       let value = definition.get(schemaMapping.field.value)
-      let config = definition.get(schemaMapping.field.config)
       let errors = definition.get(schemaMapping.field.errors)
+      let config = definition.get(schemaMapping.field.config)
       let Field = formConfig.fields[type]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -88,8 +88,8 @@ export default function compiler (store, formConfig) {
           type: type,
           name: name,
           value: value,
-          config: listToObject(config),
-          errors: (errors) ? errors.map(listToObject) : null
+          errors: (errors) ? errors.map(listToObject) : null,
+          config: listToObject(config)
         })
       )
     },
@@ -108,9 +108,19 @@ export default function compiler (store, formConfig) {
      * @return {ImmutableList} A list of the attr block’s child nodes
      */
     visitAttr (path, definition) {
+      let key = path.hashCode()
       let children = definition.get(schemaMapping.attr.children)
+      let errors = definition.get(schemaMapping.attr.errors)
       path = path.push(schemaMapping.attr.children)
-      return children.map(visit.bind(this, path))
+      let Attr = formConfig.attr
+      if (typeof Attr !== 'function') {
+        throw new Error(`Expected the attr handler to be a function.`)
+      }
+      return Attr({
+        key: key,
+        errors: (errors) ? errors.map(listToObject) : null,
+        children: children.map(visit.bind(this, path))
+      })
     },
 
     /**
@@ -129,6 +139,7 @@ export default function compiler (store, formConfig) {
     visitMany (path, definition) {
       let key = path.hashCode()
       let name = definition.get(schemaMapping.many.name)
+      let errors = definition.get(schemaMapping.many.errors)
       let contents = definition.get(schemaMapping.many.contents)
       path = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
@@ -142,6 +153,7 @@ export default function compiler (store, formConfig) {
         Many({
           key: key,
           name: name,
+          errors: (errors) ? errors.map(listToObject) : null,
           children: children
         })
       )
