@@ -88,7 +88,7 @@ export default function compiler (store, formConfig) {
           type: type,
           name: name,
           value: value,
-          errors: (errors) ? errors.map(listToObject) : null,
+          errors: errors,
           config: listToObject(config)
         })
       )
@@ -118,7 +118,7 @@ export default function compiler (store, formConfig) {
       }
       return Attr({
         key: key,
-        errors: (errors) ? errors.map(listToObject) : null,
+        errors: errors,
         children: children.map(visit.bind(this, path))
       })
     },
@@ -153,7 +153,7 @@ export default function compiler (store, formConfig) {
         Many({
           key: key,
           name: name,
-          errors: (errors) ? errors.map(listToObject) : null,
+          errors: errors,
           children: children
         })
       )
