@@ -73,7 +73,9 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
+      let displayVariant = definition.get(schemaMapping.field.displayVariant)
       let value = definition.get(schemaMapping.field.value)
+      let rules = definition.get(schemaMapping.field.rules)
       let errors = definition.get(schemaMapping.field.errors)
       let config = definition.get(schemaMapping.field.config)
       let Field = formConfig.fields[type]
@@ -82,13 +84,15 @@ export default function compiler (store, formConfig) {
       }
       return (
         Field({
-          key: key,
-          path: path,
-          store: store,
-          type: type,
-          name: name,
-          value: value,
-          errors: errors,
+          key,
+          path,
+          store,
+          type,
+          name,
+          displayVariant,
+          value,
+          rules,
+          errors,
           config: listToObject(config)
         })
       )
@@ -109,16 +113,20 @@ export default function compiler (store, formConfig) {
      */
     visitAttr (path, definition) {
       let key = path.hashCode()
-      let children = definition.get(schemaMapping.attr.children)
+      let name = definition.get(schemaMapping.attr.name)
+      let rules = definition.get(schemaMapping.attr.rules)
       let errors = definition.get(schemaMapping.attr.errors)
+      let children = definition.get(schemaMapping.attr.children)
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.attr
       if (typeof Attr !== 'function') {
         throw new Error(`Expected the attr handler to be a function.`)
       }
       return Attr({
-        key: key,
-        errors: errors,
+        key,
+        name,
+        rules,
+        errors,
         children: children.map(visit.bind(this, path))
       })
     },
@@ -139,7 +147,10 @@ export default function compiler (store, formConfig) {
     visitMany (path, definition) {
       let key = path.hashCode()
       let name = definition.get(schemaMapping.many.name)
+      let rules = definition.get(schemaMapping.many.rules)
       let errors = definition.get(schemaMapping.many.errors)
+      let config = definition.get(schemaMapping.many.config)
+      let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
       path = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
@@ -151,10 +162,13 @@ export default function compiler (store, formConfig) {
       }
       return (
         Many({
-          key: key,
-          name: name,
-          errors: errors,
-          children: children
+          key,
+          name,
+          rules,
+          errors,
+          config,
+          template,
+          children
         })
       )
     },
@@ -177,6 +191,7 @@ export default function compiler (store, formConfig) {
     visitSection (path, definition) {
       let key = path.hashCode()
       let name = definition.get(schemaMapping.section.name)
+      let config = definition.get(schemaMapping.section.config)
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
       if (!children) return
@@ -186,8 +201,9 @@ export default function compiler (store, formConfig) {
       }
       return (
         Section({
-          key: key,
-          name: name,
+          key,
+          name,
+          config,
           children: children.map(visit.bind(this, path))
         })
       )
@@ -220,8 +236,8 @@ export default function compiler (store, formConfig) {
       }
       return (
         Group({
-          key: key,
-          children: children
+          key,
+          children
         })
       )
     }
