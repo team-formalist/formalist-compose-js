@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
 import { createStore } from 'redux'
+import { batchActions, enableBatching } from 'redux-batched-actions'
 import compiler from './compiler'
 import reducer from './reducer'
 
@@ -17,8 +18,11 @@ import reducer from './reducer'
  */
 export default function composer (config) {
   return (initialState) => {
-    var immutableState = Immutable.fromJS(initialState)
-    var store = createStore(reducer, immutableState)
+    let immutableState = Immutable.fromJS(initialState)
+    let store = createStore(enableBatching(reducer), immutableState)
+    store.batchDispatch = (actions) => {
+      store.dispatch(batchActions(actions))
+    }
     return {
       render: () => {
         return compiler(store, config)

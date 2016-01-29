@@ -11,3 +11,7 @@ export function deleteField (path) {
 export function editField (path, value) {
   return { type: types.EDIT_FIELD, path, value }
 }
+
+export function validateField (path) {
+  return { type: types.VALIDATE_FIELD, path }
+}

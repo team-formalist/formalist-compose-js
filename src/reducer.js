@@ -1,5 +1,6 @@
+import Immutable from 'immutable'
 import schemaMapping from './schema-mapping'
-import { DELETE_FIELD, EDIT_FIELD } from './constants/action-types'
+import { DELETE_FIELD, EDIT_FIELD, VALIDATE_FIELD } from './constants/action-types'
 
 /**
  * TODO: Very much a WIP
@@ -19,8 +20,14 @@ export default function reducer (state, action) {
     case DELETE_FIELD:
       return state.deleteIn(action.path)
     case EDIT_FIELD:
-      var valuePath = action.path.concat([schemaMapping.field.value])
+      let valuePath = action.path.concat([schemaMapping.field.value])
       return state.updateIn(valuePath, action.value)
+    case VALIDATE_FIELD:
+      // Validation = blow away errors for now
+      let errorsPath = action.path.concat([schemaMapping.field.errors])
+      return state.updateIn(errorsPath, (val) => {
+        return Immutable.fromJS([])
+      })
     default:
       return state
   }
