@@ -71,6 +71,7 @@ export default function compiler (store, formConfig) {
      */
     visitField (path, definition, index) {
       let key = path.hashCode()
+      let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
       let displayVariant = definition.get(schemaMapping.field.displayVariant)
@@ -85,6 +86,7 @@ export default function compiler (store, formConfig) {
       return (
         Field({
           key,
+          hashCode,
           path,
           store,
           type,
@@ -113,6 +115,7 @@ export default function compiler (store, formConfig) {
      */
     visitAttr (path, definition) {
       let key = path.hashCode()
+      let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.attr.name)
       let rules = definition.get(schemaMapping.attr.rules)
       let errors = definition.get(schemaMapping.attr.errors)
@@ -124,6 +127,7 @@ export default function compiler (store, formConfig) {
       }
       return Attr({
         key,
+        hashCode,
         name,
         rules,
         errors,
@@ -146,6 +150,7 @@ export default function compiler (store, formConfig) {
      */
     visitMany (path, definition) {
       let key = path.hashCode()
+      let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.many.name)
       let rules = definition.get(schemaMapping.many.rules)
       let errors = definition.get(schemaMapping.many.errors)
@@ -163,6 +168,7 @@ export default function compiler (store, formConfig) {
       return (
         Many({
           key,
+          hashCode,
           name,
           rules,
           errors,
@@ -190,6 +196,7 @@ export default function compiler (store, formConfig) {
      */
     visitSection (path, definition) {
       let key = path.hashCode()
+      let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.section.name)
       let config = definition.get(schemaMapping.section.config)
       let children = definition.get(schemaMapping.section.children)
@@ -202,6 +209,7 @@ export default function compiler (store, formConfig) {
       return (
         Section({
           key,
+          hashCode,
           name,
           config,
           children: children.map(visit.bind(this, path))
@@ -225,6 +233,7 @@ export default function compiler (store, formConfig) {
      */
     visitGroup (path, definition) {
       let key = path.hashCode()
+      let hashCode = definition.hashCode()
       let contents = definition
       if (!contents) return
       let children = contents.map((content, index) => {
@@ -237,6 +246,7 @@ export default function compiler (store, formConfig) {
       return (
         Group({
           key,
+          hashCode,
           children
         })
       )
