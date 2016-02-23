@@ -1,45 +1,54 @@
 const simple = [
   [
-    'field',
+    "field",
     [
-      'field-one-name',
-      'int',
+      "field-one-name",
+      "int",
+      "default",
       123,
       [],
-      []
-    ]
-  ],
-  [
-    'field',
-    [
-      'field-two-name',
-      'string',
-      'Title goes here',
       [],
       []
     ]
   ],
   [
-    'section',
+    "field",
     [
-      'Main section',
+      "field-two-name",
+      "string",
+      "default",
+      "Title goes here",
+      [],
+      [],
+      []
+    ]
+  ],
+  [
+    "section",
+    [
+      "Main section",
+      [],
       [
         [
-          'field',
+          "field",
           [
-            'field-three-name',
-            'string',
+            "field-three-name",
+            "string",
+            "default",
             321,
+            [],
             [],
             []
           ]
         ],
         [
-          'field',
+          "field",
           [
-            'field-four-name',
-            'string',
-            'Content goes here',
+            "field-four-name",
+            "string",
+            "default",
+            "Content goes here",
+            [],
             [],
             []
           ]
