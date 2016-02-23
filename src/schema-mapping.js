@@ -30,7 +30,7 @@ const schemaMapping = {
     errors: 2,
     config: 3,
     template: 4,
-    contents: 5,
+    contents: 5
   },
   section: {
     name: 0,
