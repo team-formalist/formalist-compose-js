@@ -1,3 +1,4 @@
+/*eslint-disable */
 const simple = [
   [
     "field",
@@ -59,3 +60,4 @@ const simple = [
 ]
 
 export default simple
+/*eslint-enable */
