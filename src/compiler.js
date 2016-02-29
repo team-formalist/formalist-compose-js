@@ -160,7 +160,7 @@ export default function compiler (store, formConfig) {
       path = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
         return content.map(visit.bind(this, path.push(index)))
-      }).flatten(1)
+      })
       let Many = formConfig.many
       if (typeof Many !== 'function') {
         throw new Error(`Expected the many handler to be a function.`)
