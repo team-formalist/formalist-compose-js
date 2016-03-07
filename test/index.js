@@ -7,36 +7,36 @@ import schemaMapping from '../src/schema-mapping'
 import dataSimple from './fixtures/data-simple'
 import textForm from './fixtures/text-form'
 
-test('it should compose a form template', nest => {
+test('it should compose a form template', (nest) => {
   let formTemplate = composeForm({})
 
-  nest.test('... returning a callable function', assert => {
+  nest.test('... returning a callable function', (assert) => {
     assert.ok(isFunction(formTemplate), 'compose form is a function')
     assert.end()
   })
 })
 
-test('it should create a form instance from a composed template', nest => {
+test('it should create a form instance from a composed template', (nest) => {
   let formTemplate = composeForm({})
   let form = formTemplate()
 
-  nest.test('... with a render method', assert => {
+  nest.test('... with a render method', (assert) => {
     assert.ok(form.hasOwnProperty('render'), 'form has a render property')
     assert.ok(isFunction(form.render), 'render is a function')
     assert.end()
   })
 
-  nest.test('... with a store property', assert => {
+  nest.test('... with a store property', (assert) => {
     assert.ok(form.hasOwnProperty('store'), 'form has a store property')
     assert.end()
   })
 })
 
-test('it should consume an abstract syntax tree', nest => {
+test('it should consume an abstract syntax tree', (nest) => {
   let formTemplate = composeForm(textForm)
   let form = formTemplate(dataSimple)
 
-  nest.test('... and return it as a redux store', assert => {
+  nest.test('... and return it as a redux store', (assert) => {
     assert.ok(form.store.hasOwnProperty('dispatch'), 'store has a dispatch property')
     assert.ok(isFunction(form.store.dispatch), 'store has a dispatch function')
     assert.ok(form.store.hasOwnProperty('getState'), 'store has a getState property')
@@ -46,13 +46,13 @@ test('it should consume an abstract syntax tree', nest => {
     assert.end()
   })
 
-  nest.test('... and convert it to an immutable list', assert => {
+  nest.test('... and convert it to an immutable list', (assert) => {
     let list = form.store.getState()
     assert.ok(List.isList(list), 'list is Immutable.List')
     assert.end()
   })
 
-  nest.test('... with values matching the paths in the original data', assert => {
+  nest.test('... with values matching the paths in the original data', (assert) => {
     let list = form.store.getState()
 
     let actual = dataSimple[0][1][2]
@@ -67,11 +67,11 @@ test('it should consume an abstract syntax tree', nest => {
   })
 })
 
-test('it should render a form', nest => {
+test('it should render a form', (nest) => {
   let formTemplate = composeForm(textForm)
   let form = formTemplate(dataSimple)
 
-  nest.test('... matching the structure in the data', assert => {
+  nest.test('... matching the structure in the data', (assert) => {
     let renderedForm = form.render()
     let expected = 'field:field-one-name-123-0,1,field:field-two-name-Title goes here-1,1,start-section:Main section,field:field-three-name-321-2,1,2,0,1,field:field-four-name-Content goes here-2,1,2,1,1,end-section:Main section'
     assert.equals(renderedForm.join(), expected)
@@ -79,11 +79,11 @@ test('it should render a form', nest => {
   })
 })
 
-test('it should update data', nest => {
+test('it should update data', (nest) => {
   let formTemplate = composeForm(textForm)
   let form = formTemplate(dataSimple)
 
-  nest.test('... through the redux dispatcher', assert => {
+  nest.test('... through the redux dispatcher', (assert) => {
     let fieldPath = [0, 1]
     let expected = 'Updated value'
     form.store.dispatch(
