@@ -1,9 +1,9 @@
 {
-    "ecmaFeatures": {
-        "jsx": true
-    },
-    "extends": "standard",
-    "plugins": [
-        "standard"
-    ]
+  "ecmaFeatures": {
+    "jsx": true
+  },
+  "extends": "standard",
+  "plugins": [
+    "standard"
+  ]
 }
