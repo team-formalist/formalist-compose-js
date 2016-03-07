@@ -88,3 +88,9 @@ const renderableObject = compose(AST);
 console.log(renderableObject)
 // => [Array[2], Array[2], Array[2], Array[2], Array[2], Array[2], Array[2]]
 ```
+
+## Tests
+
+```
+$ npm run test
+```
