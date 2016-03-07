@@ -18,8 +18,8 @@
     "url": "https://github.com/icelab/formalist-compose/issues"
   },
   "scripts": {
-    "compile": "babel --presets babel-preset-es2015 src --out-dir lib",
-    "prepublish": "npm run compile",
+    "build": "babel --presets babel-preset-es2015 src --out-dir lib",
+    "prepublish": "npm run build",
     "test": "babel-node --presets babel-preset-es2015 test | faucet",
     "lint": "eslint 'src/*.js' 'src/**/*.js' 'test/*.js' 'test/**/*.js'",
     "posttest": "npm run lint"
