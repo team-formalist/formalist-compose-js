@@ -4,7 +4,7 @@ A JavaScript implementation for composing an abstract syntax tree (matching the 
 
 #### Example
 
-An example AST for a login form.
+An example AST of a form
 ```js
 // data.js
 
@@ -12,65 +12,56 @@ export default  = [
   [
     "field",
     [
-      "username",
-      "string",
+      "field-one-name",
+      "int",
       "default",
-      null,
-      [
-        [
-          "predicate",
-          [
-            "filled?",
-            []
-          ]
-        ]
-      ],
+      123,
       [],
-      [
-        [
-          "label",
-          "Username"
-        ],
-        [
-          "placeholder",
-          "Enter your username"
-        ]
-      ]
+      [],
+      []
     ]
   ],
   [
     "field",
     [
-      "password",
+      "field-two-name",
       "string",
       "default",
-      null,
-      [
-        [
-          "predicate",
-          [
-            "filled?",
-            []
-          ]
-        ]
-      ],
+      "Title goes here",
+      [],
+      [],
+      []
+    ]
+  ],
+  [
+    "section",
+    [
+      "Main section",
       [],
       [
         [
-          "label",
-          "Password"
+          "field",
+          [
+            "field-three-name",
+            "string",
+            "default",
+            321,
+            [],
+            [],
+            []
+          ]
         ],
         [
-          "placeholder",
-          "Enter your password"
-        ],
-        [
-          "password",
-          true
-        ],
-        [
-          "inline",
-          true
+          "field",
+          [
+            "field-four-name",
+            "string",
+            "default",
+            "Content goes here",
+            [],
+            [],
+            []
+          ]
         ]
       ]
     ]
@@ -78,15 +69,21 @@ export default  = [
 ]
 ```
 
-Import and and pass the AST to `compose` which returns a renderable object - which we can then pass to [formalist-standard-react](https://github.com/icelab/formalist-standard-react 'formalist-standard-react') to generate form fields.
+Create a _composed_ form function passing in an optional config object.  
+The _composed_ form function then consumes the `AST` and returns renderable object.
 
 ```js
-import compose from 'formalist-compose'
-import loginFormAST from './data.js'
+import composeForm from 'formalist-compose'
+import AST from './data.js'
 
-const renderableObject = compose(AST);
-console.log(renderableObject)
-// => [Array[2], Array[2], Array[2], Array[2], Array[2], Array[2], Array[2]]
+// create a 'composed' form function passing in option config object e.g. { prefix: 'user' }
+let formTemplate = composeForm()
+
+// pass the AST to the 'composed' form function
+let form = formTemplate(AST)
+
+form.render()
+//=> 'field:field-one-name-123-0,1,field:field-two-name-Title goes here-1,1,start-section:Main section,field:field-three-name-321-2,1,2,0,1,field:field-four-name-Content goes here-2,1,2,1,1,end-section:Main section'
 ```
 
 ## Tests
