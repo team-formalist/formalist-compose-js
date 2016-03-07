@@ -8,7 +8,7 @@ import dataSimple from './fixtures/data-simple'
 import textForm from './fixtures/text-form'
 
 test('it should compose a form template', (nest) => {
-  let formTemplate = composeForm({})
+  let formTemplate = composeForm()
 
   nest.test('... returning a callable function', (assert) => {
     assert.ok(isFunction(formTemplate), 'compose form is a function')
@@ -17,7 +17,7 @@ test('it should compose a form template', (nest) => {
 })
 
 test('it should create a form instance from a composed template', (nest) => {
-  let formTemplate = composeForm({})
+  let formTemplate = composeForm()
   let form = formTemplate()
 
   nest.test('... with a render method', (assert) => {
