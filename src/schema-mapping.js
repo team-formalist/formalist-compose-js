@@ -19,22 +19,31 @@ const schemaMapping = {
   },
   attr: {
     name: 0,
-    rules: 1,
-    errors: 2,
-    children: 3
+    type: 1,
+    rules: 2,
+    errors: 3,
+    attributes: 4,
+    children: 5
+  },
+  group: {
+    type: 0,
+    attributes: 1,
+    children: 2
   },
   many: {
     name: 0,
-    rules: 1,
-    errors: 2,
-    config: 3,
-    template: 4,
-    contents: 5
+    type: 1,
+    rules: 2,
+    errors: 3,
+    attributes: 4,
+    template: 5,
+    contents: 6
   },
   section: {
     name: 0,
-    config: 1,
-    children: 2
+    type: 1,
+    attributes: 2,
+    children: 3
   },
   attributes: {
     visit: {

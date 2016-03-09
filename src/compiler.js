@@ -117,8 +117,12 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.attr.name)
+      let type = definition.get(schemaMapping.attr.type)
       let rules = definition.get(schemaMapping.attr.rules)
       let errors = definition.get(schemaMapping.attr.errors)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.attr.attributes)
+      )
       let children = definition.get(schemaMapping.attr.children)
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.attr
@@ -129,8 +133,10 @@ export default function compiler (store, formConfig) {
         key,
         hashCode,
         name,
+        type,
         rules,
         errors,
+        attributes,
         children: children.map(visit.bind(this, path))
       })
     },
@@ -152,9 +158,12 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.many.name)
+      let type = definition.get(schemaMapping.many.type)
       let rules = definition.get(schemaMapping.many.rules)
       let errors = definition.get(schemaMapping.many.errors)
-      let config = definition.get(schemaMapping.many.config)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.many.attributes)
+      )
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
       path = path.push(schemaMapping.many.contents)
@@ -170,9 +179,10 @@ export default function compiler (store, formConfig) {
           key,
           hashCode,
           name,
+          type,
           rules,
           errors,
-          config,
+          attributes,
           template,
           children
         })
@@ -198,7 +208,10 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.section.name)
-      let config = definition.get(schemaMapping.section.config)
+      let type = definition.get(schemaMapping.section.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.section.attributes)
+      )
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
       if (!children) return
@@ -211,7 +224,8 @@ export default function compiler (store, formConfig) {
           key,
           hashCode,
           name,
-          config,
+          type,
+          attributes,
           children: children.map(visit.bind(this, path))
         })
       )
@@ -234,11 +248,12 @@ export default function compiler (store, formConfig) {
     visitGroup (path, definition) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
-      let contents = definition
-      if (!contents) return
-      let children = contents.map((content, index) => {
-        return content.map(visit.bind(this, path.push(index)))
-      }).flatten(1)
+      let type = definition.get(schemaMapping.group.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.group.attributes)
+      )
+      let children = definition.get(schemaMapping.group.children)
+      if (!children) return
       let Group = formConfig.group
       if (typeof Group !== 'function') {
         throw new Error(`Expected the group handler to be a function.`)
@@ -247,7 +262,9 @@ export default function compiler (store, formConfig) {
         Group({
           key,
           hashCode,
-          children
+          type,
+          attributes,
+          children: children.map(visit.bind(this, path))
         })
       )
     }

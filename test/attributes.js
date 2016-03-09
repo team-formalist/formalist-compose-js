@@ -1,7 +1,7 @@
 import test from 'tape'
 import Immutable, { List, Map } from 'immutable'
-import compileAttributes from '../../src/compile-attributes'
-import dataAttributes from '../fixtures/data-attributes'
+import compileAttributes from '../src/compile-attributes'
+import dataAttributes from './fixtures/data-attributes'
 
 test('it should compile an attributes AST', (nest) => {
   const attributes = compileAttributes(Immutable.fromJS(dataAttributes))

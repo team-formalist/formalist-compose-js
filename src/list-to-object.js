@@ -16,3 +16,7 @@ export default function listToObject (list) {
   })
   return result
 }
+
+// value
+// array
+// object
