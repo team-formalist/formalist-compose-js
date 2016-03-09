@@ -12,11 +12,10 @@ const schemaMapping = {
   field: {
     name: 0,
     type: 1,
-    displayVariant: 2,
-    value: 3,
-    rules: 4,
-    errors: 5,
-    config: 6
+    value: 2,
+    rules: 3,
+    errors: 4,
+    attributes: 5
   },
   attr: {
     name: 0,
@@ -36,6 +35,20 @@ const schemaMapping = {
     name: 0,
     config: 1,
     children: 2
+  },
+  attributes: {
+    visit: {
+      type: 0,
+      definition: 1
+    },
+    objectChildren: {
+      key: 0,
+      children: 1
+    },
+    array: {
+      children: 0
+    },
+    value: 0
   }
 }
 

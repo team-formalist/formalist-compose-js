@@ -99,3 +99,5 @@ test('it should update data', (nest) => {
     assert.end()
   })
 })
+
+import './attributes'

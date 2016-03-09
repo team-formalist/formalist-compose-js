@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import listToObject from './list-to-object'
+import compileAttributes from './compile-attributes'
 import schemaMapping from './schema-mapping'
 
 /**
@@ -74,11 +74,12 @@ export default function compiler (store, formConfig) {
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
-      let displayVariant = definition.get(schemaMapping.field.displayVariant)
       let value = definition.get(schemaMapping.field.value)
       let rules = definition.get(schemaMapping.field.rules)
       let errors = definition.get(schemaMapping.field.errors)
-      let config = definition.get(schemaMapping.field.config)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.field.attributes)
+      )
       let Field = formConfig.fields[type]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -91,11 +92,10 @@ export default function compiler (store, formConfig) {
           store,
           type,
           name,
-          displayVariant,
           value,
           rules,
           errors,
-          config: listToObject(config)
+          attributes
         })
       )
     },
