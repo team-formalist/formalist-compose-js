@@ -17,6 +17,11 @@ const schemaMapping = {
     errors: 4,
     attributes: 5
   },
+  compoundField: {
+    type: 0,
+    attributes: 1,
+    children: 2
+  },
   attr: {
     name: 0,
     type: 1,

@@ -3,6 +3,20 @@ import compileAttributes from './compile-attributes'
 import schemaMapping from './schema-mapping'
 
 /**
+ * CamelCase
+ * @param  {String} str String with "under_score"
+ * @return {String} UnderScore is now CamelCased
+ */
+function camelCase (str) {
+  str = str.replace(/_([a-z])/g, (group) => {
+    if (group[1]) {
+      return group[1].toUpperCase()
+    }
+  })
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
+/**
  * Compiler
  *
  * The compiler function consists of recursive function that traverses an AST
@@ -44,7 +58,7 @@ export default function compiler (store, formConfig) {
 
     // Use the type to create a reference to a `visit` method
     // E.g., `field` -> `visitField(...)`
-    var visitMethod = 'visit' + type.charAt(0).toUpperCase() + type.slice(1)
+    var visitMethod = 'visit' + camelCase(type)
     return destinations[visitMethod](path, definition, index)
   }
 
@@ -136,6 +150,42 @@ export default function compiler (store, formConfig) {
         type,
         rules,
         errors,
+        attributes,
+        children: children.map(visit.bind(this, path))
+      })
+    },
+
+    /**
+     * Called for each node that identifies as a 'compound_field'. Compound
+     * fields are essentially UI wrappers for a set of children, so it simply
+     * returns its `visit`ed children.
+     *
+     * @param  {ImmutableList} path A series of indices that defined the
+     * contextual 'path' of a node in the AST. For example, `[0,1,0,1,1,3,0]`.
+     * Stored as ImmutableList to avoid mutation issues while we recurse.
+     *
+     * @param  {ImmutableList} definition The list that defines the data related
+     * to the CompoundField block.
+     *
+     * @return {ImmutableList} A list of the CompoundField block’s child nodes
+     */
+    visitCompoundField (path, definition) {
+      let key = path.hashCode()
+      let hashCode = definition.hashCode()
+      let type = definition.get(schemaMapping.compoundField.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.compoundField.attributes)
+      )
+      let children = definition.get(schemaMapping.compoundField.children)
+      path = path.push(schemaMapping.compoundField.children)
+      let CompoundField = formConfig.compoundField
+      if (typeof CompoundField !== 'function') {
+        throw new Error(`Expected the CompoundField handler to be a function.`)
+      }
+      return CompoundField({
+        key,
+        hashCode,
+        type,
         attributes,
         children: children.map(visit.bind(this, path))
       })
