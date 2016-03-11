@@ -1,13 +1,13 @@
-const Group = ({name, children}) => {
-  return [`start-group:$name}`, children.join(), `end-group:$name}`]
+const Group = ({type, children}) => {
+  return [`start-group:${type}`, children.join(), `end-group:${type}`]
 }
 
 const Many = ({name, children}) => {
-  return [`start-many:$name}`, children.join(), `end-many:$name}`]
+  return [`start-many:${name}`, children.join(), `end-many:${name}`]
 }
 
 const Attr = ({name, children}) => {
-  return [`start-attr:$name}`, children.join(), `end-attr:$name}`]
+  return [`start-attr:${name}`, children.join(), `end-attr:${name}`]
 }
 
 const Section = ({name, children}) => {
@@ -24,7 +24,11 @@ export default {
   many: Many,
   section: Section,
   fields: {
-    string: Field,
-    int: Field
+    text_field: Field,
+    number_field: Field,
+    select_box: Field,
+    check_box: Field,
+    radio_buttons: Field,
+    text_area: Field
   }
 }

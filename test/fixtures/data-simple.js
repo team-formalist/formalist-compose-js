@@ -3,55 +3,451 @@ const simple = [
   [
     "field",
     [
-      "field-one-name",
-      "int",
-      "default",
-      123,
+      "text_field",
+      "text_field",
+      null,
       [],
       [],
-      []
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Text field"
+              ]
+            ]
+          ],
+          [
+            "hint",
+            [
+              "value",
+              [
+                "Text field hint"
+              ]
+            ]
+          ],
+          [
+            "placeholder",
+            [
+              "value",
+              [
+                "Text field placeholder"
+              ]
+            ]
+          ]
+        ]
+      ]
     ]
   ],
   [
     "field",
     [
-      "field-two-name",
-      "string",
-      "default",
-      "Title goes here",
+      "number_field",
+      "number_field",
+      null,
       [],
       [],
-      []
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Number field"
+              ]
+            ]
+          ],
+          [
+            "placeholder",
+            [
+              "value",
+              [
+                "Number field placeholder"
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ],
+  [
+    "field",
+    [
+      "check_box",
+      "check_box",
+      null,
+      [],
+      [],
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Checkbox"
+              ]
+            ]
+          ],
+          [
+            "question_text",
+            [
+              "value",
+              [
+                "Checkbox question?"
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ],
+  [
+    "field",
+    [
+      "select_box",
+      "select_box",
+      null,
+      [],
+      [],
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Select box"
+              ]
+            ]
+          ],
+          [
+            "options",
+            [
+              "array",
+              [
+                [
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "1"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "One"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "2"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "Two"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "3"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "Three"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ],
+  [
+    "field",
+    [
+      "radio_buttons",
+      "radio_buttons",
+      null,
+      [],
+      [],
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Radio buttons"
+              ]
+            ]
+          ],
+          [
+            "options",
+            [
+              "array",
+              [
+                [
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "1"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "One"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "2"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "Two"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ],
+                  [
+                    "array",
+                    [
+                      [
+                        [
+                          "value",
+                          [
+                            "3"
+                          ]
+                        ],
+                        [
+                          "value",
+                          [
+                            "Three"
+                          ]
+                        ]
+                      ]
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ],
+  [
+    "field",
+    [
+      "textarea",
+      "text_area",
+      null,
+      [],
+      [],
+      [
+        "object",
+        [
+          [
+            "label",
+            [
+              "value",
+              [
+                "Textarea"
+              ]
+            ]
+          ],
+          [
+            "text_size",
+            [
+              "value",
+              [
+                "normal"
+              ]
+            ]
+          ],
+          [
+            "box_size",
+            [
+              "value",
+              [
+                "normal"
+              ]
+            ]
+          ]
+        ]
+      ]
     ]
   ],
   [
     "section",
     [
-      "Main section",
-      [],
+      "section",
+      "section",
+      [
+        "object",
+        []
+      ],
       [
         [
           "field",
           [
-            "field-three-name",
-            "string",
-            "default",
-            321,
+            "section_text_field",
+            "text_field",
+            null,
             [],
             [],
-            []
+            [
+              "object",
+              [
+                [
+                  "label",
+                  [
+                    "value",
+                    [
+                      "Section text field"
+                    ]
+                  ]
+                ]
+              ]
+            ]
           ]
         ],
         [
           "field",
           [
-            "field-four-name",
-            "string",
-            "default",
-            "Content goes here",
+            "section_number_field",
+            "number_field",
+            null,
             [],
             [],
-            []
+            [
+              "object",
+              [
+                [
+                  "label",
+                  [
+                    "value",
+                    [
+                      "Section number field"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ],
+  [
+    "group",
+    [
+      "group",
+      [
+        "object",
+        []
+      ],
+      [
+        [
+          "field",
+          [
+            "group_text_field",
+            "text_field",
+            null,
+            [],
+            [],
+            [
+              "object",
+              [
+                [
+                  "label",
+                  [
+                    "value",
+                    [
+                      "Group text field"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          ]
+        ],
+        [
+          "field",
+          [
+            "group_number_field",
+            "number_field",
+            null,
+            [],
+            [],
+            [
+              "object",
+              [
+                [
+                  "label",
+                  [
+                    "value",
+                    [
+                      "Group number field"
+                    ]
+                  ]
+                ]
+              ]
+            ]
           ]
         ]
       ]
