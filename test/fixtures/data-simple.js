@@ -90,9 +90,9 @@ end
 
 attr :attr do
   text_field :attr_text_field,
-    label: "Attr text field"
+    label: "Attr text field value"
   date_field :attr_date_field,
-    label: "Attr date field"
+    label: "Attr date field value"
 end
 
 compound_field do
@@ -872,7 +872,7 @@ export default [
                   [
                     "value",
                     [
-                      "Attr text field"
+                      "Attr text field value"
                     ]
                   ]
                 ]
@@ -895,7 +895,7 @@ export default [
                   [
                     "value",
                     [
-                      "Attr date field"
+                      "Attr date field value"
                     ]
                   ]
                 ]
