@@ -104,9 +104,8 @@ end
 
  */
 
-
 /*eslint-disable */
-const simple = [
+export default [
   [
     "field",
     [
@@ -966,6 +965,4 @@ const simple = [
     ]
   ]
 ]
-
-export default simple
 /*eslint-enable */
