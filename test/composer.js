@@ -70,20 +70,36 @@ test('it should render a form', (nest) => {
     let renderedForm = form.render()
     /*eslint-disable */
     let expected = [
-      'field:text_field-null-0,1',
-      'field:number_field-null-1,1',
-      'field:check_box-null-2,1',
-      'field:select_box-null-3,1',
-      'field:radio_buttons-null-4,1',
-      'field:textarea-null-5,1',
+      'field:text_field-Text field value-0,1',
+      'field:number_field-Number field value-1,1',
+      'field:check_box-Check box value-2,1',
+      'field:select_box-3-3,1',
+      'field:radio_buttons-2-4,1',
+      'field:text_area-Text area value-5,1',
+      'field:date_field-2016-03-10-6,1',
+      'field:date_time_field-2016-03-10 17:00:00 +1100-7,1',
       'start-section:section',
-        'field:section_text_field-null-6,1,3,0,1',
-        'field:section_number_field-null-6,1,3,1,1',
+        'field:section_text_field-Section text field value-8,1,3,0,1',
+        'field:section_number_field-123-8,1,3,1,1',
       'end-section:section',
       'start-group:group',
-        'field:group_text_field-null-7,1,0,1',
-        'field:group_number_field-null-7,1,1,1',
-      'end-group:group'
+        'field:group_text_field-Group text field value-9,1,0,1',
+        'field:group_number_field-123-9,1,1,1',
+      'end-group:group',
+      'start-many:many',
+        'field:many_text_field-Many text field 1-10,1,5,0,0,1',
+        'field:many_date_field-2016-03-10-10,1,5,0,1,1',
+        'field:many_text_field-Many text field 2-10,1,5,1,0,1',
+        'field:many_date_field-2016-03-09-10,1,5,1,1,1',
+      'end-many:many',
+      'start-attr:attr',
+        'field:attr_text_field-Attr text field-11,1,4,0,1',
+        'field:attr_date_field-2016-03-10-11,1,4,1,1',
+      'end-attr:attr',
+      'start-compound',
+        'field:compound_field_text_field-Compound text field value-12,1,2,0,1',
+        'field:compound_field_date_field-2016-03-10-12,1,2,1,1',
+      'end-compound'
     ].join(',')
     /*eslint-enable */
     assert.equals(renderedForm.join(','), expected)

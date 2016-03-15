@@ -93,7 +93,6 @@ export default function compiler (store, formConfig) {
       let name = definition.get(schemaMapping.field.name)
       let type = definition.get(schemaMapping.field.type)
       let value = definition.get(schemaMapping.field.value)
-      let rules = definition.get(schemaMapping.field.rules)
       let errors = definition.get(schemaMapping.field.errors)
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
@@ -111,7 +110,6 @@ export default function compiler (store, formConfig) {
           type,
           name,
           value,
-          rules,
           errors,
           attributes
         })
@@ -136,7 +134,6 @@ export default function compiler (store, formConfig) {
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.attr.name)
       let type = definition.get(schemaMapping.attr.type)
-      let rules = definition.get(schemaMapping.attr.rules)
       let errors = definition.get(schemaMapping.attr.errors)
       let attributes = compileAttributes(
         definition.get(schemaMapping.attr.attributes)
@@ -152,7 +149,6 @@ export default function compiler (store, formConfig) {
         hashCode,
         name,
         type,
-        rules,
         errors,
         attributes,
         children: children.map(visit.bind(this, path))
@@ -213,7 +209,6 @@ export default function compiler (store, formConfig) {
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.many.name)
       let type = definition.get(schemaMapping.many.type)
-      let rules = definition.get(schemaMapping.many.rules)
       let errors = definition.get(schemaMapping.many.errors)
       let attributes = compileAttributes(
         definition.get(schemaMapping.many.attributes)
@@ -234,7 +229,6 @@ export default function compiler (store, formConfig) {
           hashCode,
           name,
           type,
-          rules,
           errors,
           attributes,
           template,

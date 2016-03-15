@@ -13,9 +13,8 @@ const schemaMapping = {
     name: 0,
     type: 1,
     value: 2,
-    rules: 3,
-    errors: 4,
-    attributes: 5
+    errors: 3,
+    attributes: 4
   },
   compoundField: {
     type: 0,
@@ -25,10 +24,9 @@ const schemaMapping = {
   attr: {
     name: 0,
     type: 1,
-    rules: 2,
-    errors: 3,
-    attributes: 4,
-    children: 5
+    errors: 2,
+    attributes: 3,
+    children: 4
   },
   group: {
     type: 0,
@@ -38,11 +36,10 @@ const schemaMapping = {
   many: {
     name: 0,
     type: 1,
-    rules: 2,
-    errors: 3,
-    attributes: 4,
-    template: 5,
-    contents: 6
+    errors: 2,
+    attributes: 3,
+    template: 4,
+    contents: 5
   },
   section: {
     name: 0,
