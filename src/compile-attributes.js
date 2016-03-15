@@ -1,5 +1,6 @@
 import { List, Map } from 'immutable'
 import schemaMapping from './schema-mapping'
+import camelCase from './utils/camel-case'
 
 /**
  * Attributes compiler
@@ -13,9 +14,9 @@ import schemaMapping from './schema-mapping'
  */
 export default function compileAttributes (attributes) {
   function visit (node) {
-    const type = node.get(schemaMapping.attributes.visit.type)
+    const type = camelCase(node.get(schemaMapping.attributes.visit.type), true)
     const definition = node.get(schemaMapping.attributes.visit.definition)
-    return destinations['visit' + type.charAt(0).toUpperCase() + type.slice(1)](definition)
+    return destinations['visit' + type](definition)
   }
 
   /**
