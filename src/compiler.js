@@ -80,7 +80,6 @@ export default function compiler (store, formConfig) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
       )
-      console.log(formConfig.fields)
       let Field = formConfig.fields[type]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
