@@ -7,13 +7,17 @@ import schemaMapping from './schema-mapping'
  * @param  {String} str String with "under_score"
  * @return {String} UnderScore is now CamelCased
  */
-function camelCase (str) {
+function camelCase (str, capitaliseLead = false) {
   str = str.replace(/_([a-z])/g, (group) => {
     if (group[1]) {
       return group[1].toUpperCase()
     }
   })
-  return str.charAt(0).toUpperCase() + str.slice(1)
+  if (capitaliseLead) {
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  } else {
+    return str
+  }
 }
 
 /**
@@ -58,7 +62,7 @@ export default function compiler (store, formConfig) {
 
     // Use the type to create a reference to a `visit` method
     // E.g., `field` -> `visitField(...)`
-    var visitMethod = 'visit' + camelCase(type)
+    var visitMethod = 'visit' + camelCase(type, true)
     return destinations[visitMethod](path, definition, index)
   }
 
@@ -94,7 +98,7 @@ export default function compiler (store, formConfig) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
       )
-      let Field = formConfig.fields[type]
+      let Field = formConfig.fields[camelCase(type)]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
       }
