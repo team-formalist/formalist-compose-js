@@ -7,7 +7,7 @@ const attributes = [
       [
         "value",
         [
-          "String (radio)"
+          "Select box"
         ]
       ]
     ],
@@ -17,60 +17,52 @@ const attributes = [
         "array",
         [
           [
+            "array",
             [
-              "array",
               [
+                "value",
                 [
-                  [
-                    "value",
-                    [
-                      "1"
-                    ]
-                  ],
-                  [
-                    "value",
-                    [
-                      "One"
-                    ]
-                  ]
+                  "1"
+                ]
+              ],
+              [
+                "value",
+                [
+                  "One"
                 ]
               ]
-            ],
+            ]
+          ],
+          [
+            "array",
             [
-              "array",
               [
+                "value",
                 [
-                  [
-                    "value",
-                    [
-                      "2"
-                    ]
-                  ],
-                  [
-                    "value",
-                    [
-                      "Two"
-                    ]
-                  ]
+                  "2"
+                ]
+              ],
+              [
+                "value",
+                [
+                  "Two"
                 ]
               ]
-            ],
+            ]
+          ],
+          [
+            "array",
             [
-              "array",
               [
+                "value",
                 [
-                  [
-                    "value",
-                    [
-                      "3"
-                    ]
-                  ],
-                  [
-                    "value",
-                    [
-                      "Three"
-                    ]
-                  ]
+                  "3"
+                ]
+              ],
+              [
+                "value",
+                [
+                  "Three"
                 ]
               ]
             ]

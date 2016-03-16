@@ -13,7 +13,7 @@ test('it should compile an attributes AST', (nest) => {
 
   nest.test('... containing the correct data', (assert) => {
     assert.plan(2)
-    assert.equals(attributes.get('label'), 'String (radio)', 'label is correct')
+    assert.equals(attributes.get('label'), 'Select box', 'label is correct')
     assert.deepEqual(
       attributes.get('options').toJS(),
       [

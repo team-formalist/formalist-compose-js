@@ -263,60 +263,52 @@ export default [
               "array",
               [
                 [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "1"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "One"
-                          ]
-                        ]
+                        "1"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "One"
                       ]
                     ]
-                  ],
+                  ]
+                ],
+                [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "2"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "Two"
-                          ]
-                        ]
+                        "2"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "Two"
                       ]
                     ]
-                  ],
+                  ]
+                ],
+                [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "3"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "Three"
-                          ]
-                        ]
+                        "3"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "Three"
                       ]
                     ]
                   ]
@@ -353,60 +345,52 @@ export default [
               "array",
               [
                 [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "1"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "One"
-                          ]
-                        ]
+                        "1"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "One"
                       ]
                     ]
-                  ],
+                  ]
+                ],
+                [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "2"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "Two"
-                          ]
-                        ]
+                        "2"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "Two"
                       ]
                     ]
-                  ],
+                  ]
+                ],
+                [
+                  "array",
                   [
-                    "array",
                     [
+                      "value",
                       [
-                        [
-                          "value",
-                          [
-                            "3"
-                          ]
-                        ],
-                        [
-                          "value",
-                          [
-                            "Three"
-                          ]
-                        ]
+                        "3"
+                      ]
+                    ],
+                    [
+                      "value",
+                      [
+                        "Three"
                       ]
                     ]
                   ]
@@ -862,7 +846,7 @@ export default [
           [
             "attr_text_field",
             "text_field",
-            "Attr text field",
+            "Attr text field value",
             [],
             [
               "object",
@@ -872,7 +856,7 @@ export default [
                   [
                     "value",
                     [
-                      "Attr text field value"
+                      "Attr text field"
                     ]
                   ]
                 ]
@@ -895,7 +879,7 @@ export default [
                   [
                     "value",
                     [
-                      "Attr date field value"
+                      "Attr date field"
                     ]
                   ]
                 ]

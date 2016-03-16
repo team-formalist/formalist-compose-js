@@ -93,7 +93,7 @@ test('it should render a form', (nest) => {
         'field:many_date_field-2016-03-09-10,1,5,1,1,1',
       'end-many:many',
       'start-attr:attr',
-        'field:attr_text_field-Attr text field-11,1,4,0,1',
+        'field:attr_text_field-Attr text field value-11,1,4,0,1',
         'field:attr_date_field-2016-03-10-11,1,4,1,1',
       'end-attr:attr',
       'start-compound',
