@@ -47,8 +47,7 @@ export default function compileAttributes (attributes) {
      * @return {ImmutableList} A compiled list
      */
     visitArray (definition) {
-      const children = definition.get(schemaMapping.attributes.array.children)
-      return children.map(visit)
+      return definition.map(visit)
     },
 
     /**

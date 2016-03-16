@@ -56,9 +56,6 @@ const schemaMapping = {
       key: 0,
       children: 1
     },
-    array: {
-      children: 0
-    },
     value: 0
   }
 }
