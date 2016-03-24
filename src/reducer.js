@@ -23,11 +23,14 @@ export default function reducer (state, action) {
       let valuePath = action.path.concat([schemaMapping.field.value])
       return state.updateIn(valuePath, action.value)
     case VALIDATE_FIELD:
-      const { errors } = action
-      let errorsPath = action.path.concat([schemaMapping.field.errors])
-      return state.updateIn(errorsPath, (val) => {
-        return Immutable.fromJS(errors)
-      })
+      let { errors } = action
+      if (errors) {
+        let errorsPath = action.path.concat([schemaMapping.field.errors])
+        return state.updateIn(errorsPath, (val) => {
+          return Immutable.fromJS(errors)
+        })
+      }
+      return state
     default:
       return state
   }
