@@ -284,6 +284,7 @@ export default function compiler (store, formConfig) {
         definition.get(schemaMapping.group.attributes)
       )
       let children = definition.get(schemaMapping.group.children)
+      path = path.push(schemaMapping.group.children)
       if (!children) return
       let Group = formConfig.group
       if (typeof Group !== 'function') {
