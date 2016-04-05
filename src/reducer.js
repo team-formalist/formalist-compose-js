@@ -1,6 +1,6 @@
 import Immutable from 'immutable'
 import schemaMapping from './schema-mapping'
-import { DELETE_FIELD, EDIT_FIELD, VALIDATE_FIELD } from './constants/action-types'
+import * as types from './constants/action-types'
 
 /**
  * TODO: Very much a WIP
@@ -17,20 +17,46 @@ import { DELETE_FIELD, EDIT_FIELD, VALIDATE_FIELD } from './constants/action-typ
  */
 export default function reducer (state, action) {
   switch (action.type) {
-    case DELETE_FIELD:
+    case types.DELETE_FIELD:
       return state.deleteIn(action.path)
-    case EDIT_FIELD:
+
+    case types.EDIT_FIELD:
       let valuePath = action.path.concat([schemaMapping.field.value])
       return state.updateIn(valuePath, action.value)
-    case VALIDATE_FIELD:
-      let { errors } = action
-      if (errors) {
+
+    case types.VALIDATE_FIELD:
+      if (action.errors) {
         let errorsPath = action.path.concat([schemaMapping.field.errors])
         return state.updateIn(errorsPath, (val) => {
-          return Immutable.fromJS(errors)
+          return Immutable.fromJS(action.errors)
         })
       }
       return state
+
+    case types.ADD_MANY_CONTENT:
+      let templatePath = action.path.concat([schemaMapping.many.template])
+      let template = state.getIn(templatePath)
+      var contentsPath = action.path.concat([schemaMapping.many.contents])
+      var contents = state.getIn(contentsPath)
+      contents = contents.push(template)
+      return state.setIn(contentsPath, contents)
+
+    case types.DELETE_MANY_CONTENT:
+      return state.deleteIn(action.path)
+
+    case types.EDIT_MANY_CONTENTS:
+      var contentsPath = action.path.concat([schemaMapping.many.contents])
+      return state.updateIn(contentsPath, action.contents)
+
+    case types.VALIDATE_MANY:
+      if (action.errors) {
+        let errorsPath = action.path.concat([schemaMapping.many.errors])
+        return state.updateIn(errorsPath, (val) => {
+          return Immutable.fromJS(action.errors)
+        })
+      }
+      return state
+
     default:
       return state
   }
