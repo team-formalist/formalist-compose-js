@@ -79,7 +79,31 @@ test('it should handle `many` options', (nest) => {
     assert.end()
   })
 
-  // nest.test('... allow validation messages to assigned', (assert) => {
-  //   assert.end()
-  // })
+  nest.test('... allow validation messages to assigned', (assert) => {
+    // Get the initial content
+    const initialErrors = form.store.getState().getIn(
+      basePath.concat(schemaMapping.many.errors)
+    )
+
+    // Dispatch call to edit contents. We simply reverse the order
+    // so we can check that they swap
+    form.store.dispatch(
+      manyActions.validateMany(
+        basePath,
+        [
+          'Too many things',
+          'Not enough things'
+        ]
+      )
+    )
+
+    // Get the updated content
+    const modifiedErrors = form.store.getState().getIn(
+      basePath.concat(schemaMapping.many.errors)
+    )
+
+    assert.equals(initialErrors.count(), 0)
+    assert.equals(modifiedErrors.count(), 2)
+    assert.end()
+  })
 })
