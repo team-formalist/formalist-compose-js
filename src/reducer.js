@@ -17,14 +17,16 @@ import * as types from './constants/action-types'
  */
 export default function reducer (state, action) {
   switch (action.type) {
-    case types.DELETE_FIELD:
+    case types.DELETE_FIELD: {
       return state.deleteIn(action.path)
+    }
 
-    case types.EDIT_FIELD:
+    case types.EDIT_FIELD: {
       let valuePath = action.path.concat([schemaMapping.field.value])
       return state.updateIn(valuePath, action.value)
+    }
 
-    case types.VALIDATE_FIELD:
+    case types.VALIDATE_FIELD: {
       if (action.errors) {
         let errorsPath = action.path.concat([schemaMapping.field.errors])
         return state.updateIn(errorsPath, (val) => {
@@ -32,23 +34,27 @@ export default function reducer (state, action) {
         })
       }
       return state
+    }
 
-    case types.ADD_MANY_CONTENT:
+    case types.ADD_MANY_CONTENT: {
       let templatePath = action.path.concat([schemaMapping.many.template])
       let template = state.getIn(templatePath)
-      var contentsPath = action.path.concat([schemaMapping.many.contents])
-      var contents = state.getIn(contentsPath)
+      let contentsPath = action.path.concat([schemaMapping.many.contents])
+      let contents = state.getIn(contentsPath)
       contents = contents.push(template)
       return state.setIn(contentsPath, contents)
+    }
 
-    case types.DELETE_MANY_CONTENT:
+    case types.DELETE_MANY_CONTENT: {
       return state.deleteIn(action.path)
+    }
 
-    case types.EDIT_MANY_CONTENTS:
-      var contentsPath = action.path.concat([schemaMapping.many.contents])
+    case types.EDIT_MANY_CONTENTS: {
+      let contentsPath = action.path.concat([schemaMapping.many.contents])
       return state.updateIn(contentsPath, action.contents)
+    }
 
-    case types.VALIDATE_MANY:
+    case types.VALIDATE_MANY: {
       if (action.errors) {
         let errorsPath = action.path.concat([schemaMapping.many.errors])
         return state.updateIn(errorsPath, (val) => {
@@ -56,8 +62,10 @@ export default function reducer (state, action) {
         })
       }
       return state
+    }
 
-    default:
+    default: {
       return state
+    }
   }
 }
