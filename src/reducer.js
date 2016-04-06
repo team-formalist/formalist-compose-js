@@ -64,10 +64,16 @@ export default function reducer (state, action) {
     }
 
     case types.VALIDATE_MANY: {
-      if (action.errors) {
+      if (action.validate) {
         let errorsPath = action.path.concat([schemaMapping.many.errors])
+        let contentsPath = action.path.concat([schemaMapping.many.contents])
+        let contents = state.getIn(contentsPath)
+
         return state.updateIn(errorsPath, (val) => {
-          return Immutable.fromJS(action.errors)
+          // Run contents through the validator function
+          return Immutable.fromJS(
+            action.validate(contents.toJS())
+          )
         })
       }
       return state
