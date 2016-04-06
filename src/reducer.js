@@ -54,6 +54,15 @@ export default function reducer (state, action) {
       return state.updateIn(contentsPath, action.contents)
     }
 
+    case types.REORDER_MANY_CONTENTS: {
+      let contentsPath = action.path.concat([schemaMapping.many.contents])
+      let contents = state.getIn(contentsPath)
+      let updatedContents = Immutable.fromJS(action.order).map((index) => (
+        contents.get(index)
+      ))
+      return state.setIn(contentsPath, updatedContents)
+    }
+
     case types.VALIDATE_MANY: {
       if (action.errors) {
         let errorsPath = action.path.concat([schemaMapping.many.errors])
