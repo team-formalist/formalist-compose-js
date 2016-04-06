@@ -198,9 +198,14 @@ export default function compiler (store, formConfig) {
       )
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
-      path = path.push(schemaMapping.many.contents)
+      let contentsPath = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
-        return content.map(visit.bind(this, path.push(index)))
+        return content.map(
+          visit.bind(
+            this,
+            contentsPath.push(index)
+          )
+        )
       })
       let Many = formConfig.many
       if (typeof Many !== 'function') {
@@ -210,12 +215,15 @@ export default function compiler (store, formConfig) {
         Many({
           key,
           hashCode,
+          path,
+          contentsPath,
           name,
           type,
           errors,
           attributes,
           template,
-          children
+          children,
+          store
         })
       )
     },
