@@ -90,10 +90,10 @@ test('it should handle `many` options', (nest) => {
     form.store.dispatch(
       manyActions.validateMany(
         basePath,
-        [
+        (contents) => ([
           'Too many things',
           'Not enough things'
-        ]
+        ])
       )
     )
 
