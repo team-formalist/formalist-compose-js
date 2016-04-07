@@ -12,30 +12,51 @@ const schemaMapping = {
   field: {
     name: 0,
     type: 1,
-    displayVariant: 2,
-    value: 3,
-    rules: 4,
-    errors: 5,
-    config: 6
+    value: 2,
+    errors: 3,
+    attributes: 4
+  },
+  compoundField: {
+    type: 0,
+    attributes: 1,
+    children: 2
   },
   attr: {
     name: 0,
-    rules: 1,
+    type: 1,
     errors: 2,
-    children: 3
+    attributes: 3,
+    children: 4
+  },
+  group: {
+    type: 0,
+    attributes: 1,
+    children: 2
   },
   many: {
     name: 0,
-    rules: 1,
+    type: 1,
     errors: 2,
-    config: 3,
+    attributes: 3,
     template: 4,
     contents: 5
   },
   section: {
     name: 0,
-    config: 1,
-    children: 2
+    type: 1,
+    attributes: 2,
+    children: 3
+  },
+  attributes: {
+    visit: {
+      type: 0,
+      definition: 1
+    },
+    objectChildren: {
+      key: 0,
+      children: 1
+    },
+    value: 0
   }
 }
 

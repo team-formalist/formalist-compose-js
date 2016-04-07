@@ -1,6 +1,7 @@
 import { List } from 'immutable'
-import listToObject from './list-to-object'
+import compileAttributes from './compile-attributes'
 import schemaMapping from './schema-mapping'
+import camelCase from './utils/camel-case'
 
 /**
  * Compiler
@@ -44,7 +45,7 @@ export default function compiler (store, formConfig) {
 
     // Use the type to create a reference to a `visit` method
     // E.g., `field` -> `visitField(...)`
-    var visitMethod = 'visit' + type.charAt(0).toUpperCase() + type.slice(1)
+    var visitMethod = 'visit' + camelCase(type, true)
     return destinations[visitMethod](path, definition, index)
   }
 
@@ -73,12 +74,12 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.field.name)
-      let type = definition.get(schemaMapping.field.type)
-      let displayVariant = definition.get(schemaMapping.field.displayVariant)
+      let type = camelCase(definition.get(schemaMapping.field.type))
       let value = definition.get(schemaMapping.field.value)
-      let rules = definition.get(schemaMapping.field.rules)
       let errors = definition.get(schemaMapping.field.errors)
-      let config = definition.get(schemaMapping.field.config)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.field.attributes)
+      )
       let Field = formConfig.fields[type]
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -91,11 +92,9 @@ export default function compiler (store, formConfig) {
           store,
           type,
           name,
-          displayVariant,
           value,
-          rules,
           errors,
-          config: listToObject(config)
+          attributes
         })
       )
     },
@@ -117,20 +116,60 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.attr.name)
-      let rules = definition.get(schemaMapping.attr.rules)
+      let type = definition.get(schemaMapping.attr.type)
       let errors = definition.get(schemaMapping.attr.errors)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.attr.attributes)
+      )
       let children = definition.get(schemaMapping.attr.children)
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.attr
       if (typeof Attr !== 'function') {
-        throw new Error(`Expected the attr handler to be a function.`)
+        throw new Error('Expected the attr handler to be a function.')
       }
       return Attr({
         key,
         hashCode,
         name,
-        rules,
+        type,
         errors,
+        attributes,
+        children: children.map(visit.bind(this, path))
+      })
+    },
+
+    /**
+     * Called for each node that identifies as a 'compound_field'. Compound
+     * fields are essentially UI wrappers for a set of children, so it simply
+     * returns its `visit`ed children.
+     *
+     * @param  {ImmutableList} path A series of indices that defined the
+     * contextual 'path' of a node in the AST. For example, `[0,1,0,1,1,3,0]`.
+     * Stored as ImmutableList to avoid mutation issues while we recurse.
+     *
+     * @param  {ImmutableList} definition The list that defines the data related
+     * to the CompoundField block.
+     *
+     * @return {ImmutableList} A list of the CompoundField block’s child nodes
+     */
+    visitCompoundField (path, definition) {
+      let key = path.hashCode()
+      let hashCode = definition.hashCode()
+      let type = definition.get(schemaMapping.compoundField.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.compoundField.attributes)
+      )
+      let children = definition.get(schemaMapping.compoundField.children)
+      path = path.push(schemaMapping.compoundField.children)
+      let CompoundField = formConfig.compoundField
+      if (typeof CompoundField !== 'function') {
+        throw new Error('Expected the CompoundField handler to be a function.')
+      }
+      return CompoundField({
+        key,
+        hashCode,
+        type,
+        attributes,
         children: children.map(visit.bind(this, path))
       })
     },
@@ -152,29 +191,39 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.many.name)
-      let rules = definition.get(schemaMapping.many.rules)
+      let type = definition.get(schemaMapping.many.type)
       let errors = definition.get(schemaMapping.many.errors)
-      let config = definition.get(schemaMapping.many.config)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.many.attributes)
+      )
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
-      path = path.push(schemaMapping.many.contents)
+      let contentsPath = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
-        return content.map(visit.bind(this, path.push(index)))
+        return content.map(
+          visit.bind(
+            this,
+            contentsPath.push(index)
+          )
+        )
       })
       let Many = formConfig.many
       if (typeof Many !== 'function') {
-        throw new Error(`Expected the many handler to be a function.`)
+        throw new Error('Expected the many handler to be a function.')
       }
       return (
         Many({
           key,
           hashCode,
+          path,
+          contentsPath,
           name,
-          rules,
+          type,
           errors,
-          config,
+          attributes,
           template,
-          children
+          children,
+          store
         })
       )
     },
@@ -198,20 +247,24 @@ export default function compiler (store, formConfig) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.section.name)
-      let config = definition.get(schemaMapping.section.config)
+      let type = definition.get(schemaMapping.section.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.section.attributes)
+      )
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
       if (!children) return
       let Section = formConfig.section
       if (typeof Section !== 'function') {
-        throw new Error(`Expected the section handler to be a function.`)
+        throw new Error('Expected the section handler to be a function.')
       }
       return (
         Section({
           key,
           hashCode,
           name,
-          config,
+          type,
+          attributes,
           children: children.map(visit.bind(this, path))
         })
       )
@@ -234,20 +287,24 @@ export default function compiler (store, formConfig) {
     visitGroup (path, definition) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
-      let contents = definition
-      if (!contents) return
-      let children = contents.map((content, index) => {
-        return content.map(visit.bind(this, path.push(index)))
-      }).flatten(1)
+      let type = definition.get(schemaMapping.group.type)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.group.attributes)
+      )
+      let children = definition.get(schemaMapping.group.children)
+      path = path.push(schemaMapping.group.children)
+      if (!children) return
       let Group = formConfig.group
       if (typeof Group !== 'function') {
-        throw new Error(`Expected the group handler to be a function.`)
+        throw new Error('Expected the group handler to be a function.')
       }
       return (
         Group({
           key,
           hashCode,
-          children
+          type,
+          attributes,
+          children: children.map(visit.bind(this, path))
         })
       )
     }
