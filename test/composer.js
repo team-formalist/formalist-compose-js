@@ -1,4 +1,5 @@
 import test from 'tape'
+import isFunction from '@f/is-function'
 import schemaMapping from '../src/schema-mapping'
 import composeForm from '../src'
 import { List } from 'immutable'
@@ -6,12 +7,8 @@ import dataSimple from './fixtures/data-simple'
 import textForm from './fixtures/text-form'
 import * as fieldActions from '../src/actions/fields'
 
-const isFunction = function (obj) {
-  return typeof obj === 'function'
-}
-
 test('it should compose a form template', (nest) => {
-  let formTemplate = composeForm({})
+  let formTemplate = composeForm()
 
   nest.test('... returning a callable function', (assert) => {
     assert.ok(isFunction(formTemplate), 'compose form is a function')
@@ -20,7 +17,7 @@ test('it should compose a form template', (nest) => {
 })
 
 test('it should create a form instance from a composed template', (nest) => {
-  let formTemplate = composeForm({})
+  let formTemplate = composeForm()
   let form = formTemplate()
 
   nest.test('... with a render method', (assert) => {
@@ -52,12 +49,12 @@ test('it should consume an abstract syntax tree', (nest) => {
     assert.ok(List.isList(list), 'list is Immutable.List')
     assert.end()
   })
-  nest.test('... with values matching the paths in the original data', (assert) => {
+  nest.test('... with values matching the paths in the expected data', (assert) => {
     let list = form.store.getState()
 
-    let original = dataSimple[0][1][2]
-    let parsed = list.getIn([0, 1, 2])
-    assert.equals(parsed, original)
+    let expected = dataSimple[0][1][2]
+    let actual = list.getIn([0, 1, 2])
+    assert.equals(actual, expected)
 
     assert.end()
   })
@@ -113,18 +110,18 @@ test('it should update data', (nest) => {
 
   nest.test('... through the redux dispatcher', (assert) => {
     let fieldPath = [0, 1]
-    let expectedValue = 'Updated value'
+    let expected = 'Updated value'
     form.store.dispatch(
       fieldActions.editField(
         fieldPath,
-        function (val) { return expectedValue }
+        function (val) { return expected }
       )
     )
     let list = form.store.getState()
     let updatedValue = list.getIn(
       fieldPath.concat([schemaMapping.field.value])
     )
-    assert.equals(updatedValue, expectedValue)
+    assert.equals(updatedValue, expected)
     assert.end()
   })
 })
