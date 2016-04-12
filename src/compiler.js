@@ -125,7 +125,7 @@ export default function compiler (store, formConfig) {
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.attr
       if (typeof Attr !== 'function') {
-        throw new Error(`Expected the attr handler to be a function.`)
+        throw new Error('Expected the attr handler to be a function.')
       }
       return Attr({
         key,
@@ -163,7 +163,7 @@ export default function compiler (store, formConfig) {
       path = path.push(schemaMapping.compoundField.children)
       let CompoundField = formConfig.compoundField
       if (typeof CompoundField !== 'function') {
-        throw new Error(`Expected the CompoundField handler to be a function.`)
+        throw new Error('Expected the CompoundField handler to be a function.')
       }
       return CompoundField({
         key,
@@ -198,24 +198,32 @@ export default function compiler (store, formConfig) {
       )
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
-      path = path.push(schemaMapping.many.contents)
+      let contentsPath = path.push(schemaMapping.many.contents)
       let children = contents.map((content, index) => {
-        return content.map(visit.bind(this, path.push(index)))
+        return content.map(
+          visit.bind(
+            this,
+            contentsPath.push(index)
+          )
+        )
       })
       let Many = formConfig.many
       if (typeof Many !== 'function') {
-        throw new Error(`Expected the many handler to be a function.`)
+        throw new Error('Expected the many handler to be a function.')
       }
       return (
         Many({
           key,
           hashCode,
+          path,
+          contentsPath,
           name,
           type,
           errors,
           attributes,
           template,
-          children
+          children,
+          store
         })
       )
     },
@@ -248,7 +256,7 @@ export default function compiler (store, formConfig) {
       if (!children) return
       let Section = formConfig.section
       if (typeof Section !== 'function') {
-        throw new Error(`Expected the section handler to be a function.`)
+        throw new Error('Expected the section handler to be a function.')
       }
       return (
         Section({
@@ -288,7 +296,7 @@ export default function compiler (store, formConfig) {
       if (!children) return
       let Group = formConfig.group
       if (typeof Group !== 'function') {
-        throw new Error(`Expected the group handler to be a function.`)
+        throw new Error('Expected the group handler to be a function.')
       }
       return (
         Group({

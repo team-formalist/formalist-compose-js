@@ -3,7 +3,7 @@ const Attr = ({name, children}) => {
 }
 
 const CompoundField = ({children}) => {
-  return [`start-compound`, children.join(), `end-compound`]
+  return ['start-compound', children.join(), 'end-compound']
 }
 
 const Field = ({name, value, config, path, store}) => {
