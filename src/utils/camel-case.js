@@ -4,8 +4,6 @@
  * @return {String} UnderScore is now CamelCased
  */
 function camelCase (str, capitaliseLead = false) {
-  if (typeof (str) !== "string") return
-
   str = str.replace(/_([a-z])/g, (group) => {
     if (group[1]) {
       return group[1].toUpperCase()
