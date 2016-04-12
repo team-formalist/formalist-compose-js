@@ -15,9 +15,8 @@ function camelCase (str, capitaliseLead = false) {
     } else {
       return str
     }
-  }
-  catch (err) {
-    throw new Error (err + '. `str` is ' + str)
+  } catch (err) {
+    throw new Error(err + '. `str` is ' + str)
   }
 }
 
