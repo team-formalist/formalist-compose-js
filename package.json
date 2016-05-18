@@ -19,11 +19,10 @@
   },
   "scripts": {
     "build": "babel src --out-dir lib",
-    "precompile": "npm run clean",
-    "compile": "npm run build",
+    "prebuild": "npm run clean",
     "watch": "wr 'npm run build' ./src",
     "clean": "rm -rf ./lib/*",
-    "prepublish": "npm run compile",
+    "prepublish": "npm run build",
     "test": "babel-node test | faucet",
     "posttest": "npm run lint",
     "lint": "eslint 'src/*.js' 'src/**/*.js' 'test/*.js' 'test/**/*.js'",
