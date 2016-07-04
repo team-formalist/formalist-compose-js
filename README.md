@@ -73,11 +73,11 @@ Create a _composed_ form function passing in an optional config object.
 The _composed_ form function then consumes the `AST` and returns renderable object.
 
 ```js
-import composeForm from 'formalist-compose'
+import composeForm, {createFormConfig} from 'formalist-compose'
 import AST from './data.js'
 
 // create a 'composed' form function passing in option config object e.g. { prefix: 'user' }
-let formTemplate = composeForm()
+let formTemplate = composeForm(createFormConfig({ ... form config }))
 
 // pass the AST to the 'composed' form function
 let form = formTemplate(AST)
