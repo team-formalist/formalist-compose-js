@@ -1,3 +1,5 @@
+import {createFormConfig} from '../../src'
+
 const Attr = ({name, children}) => {
   return [`start-attr:${name}`, children.join(), `end-attr:${name}`]
 }
@@ -21,13 +23,15 @@ const Many = ({name, children}) => {
 const Section = ({name, children}) => {
   return [`start-section:${name}`, children.join(), `end-section:${name}`]
 }
-export default {
+
+export default createFormConfig({
   attr: Attr,
   group: Group,
   many: Many,
   compoundField: CompoundField,
   section: Section,
   fields: {
+    default: Field,
     checkBox: Field,
     dateField: Field,
     dateTimeField: Field,
@@ -35,6 +39,6 @@ export default {
     radioButtons: Field,
     selectBox: Field,
     textArea: Field,
-    textField: Field
-  }
-}
+    textField: Field,
+  },
+})

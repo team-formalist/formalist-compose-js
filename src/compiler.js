@@ -80,7 +80,7 @@ export default function compiler (store, formConfig) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
       )
-      let Field = formConfig.fields[type]
+      let Field = formConfig.get('field', type)
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
       }
@@ -94,7 +94,7 @@ export default function compiler (store, formConfig) {
           name,
           value,
           errors,
-          attributes
+          attributes,
         })
       )
     },
@@ -123,7 +123,7 @@ export default function compiler (store, formConfig) {
       )
       let children = definition.get(schemaMapping.attr.children)
       path = path.push(schemaMapping.attr.children)
-      let Attr = formConfig.attr
+      let Attr = formConfig.get('attr')
       if (typeof Attr !== 'function') {
         throw new Error('Expected the attr handler to be a function.')
       }
@@ -134,7 +134,7 @@ export default function compiler (store, formConfig) {
         type,
         errors,
         attributes,
-        children: children.map(visit.bind(this, path))
+        children: children.map(visit.bind(this, path)),
       })
     },
 
@@ -161,7 +161,7 @@ export default function compiler (store, formConfig) {
       )
       let children = definition.get(schemaMapping.compoundField.children)
       path = path.push(schemaMapping.compoundField.children)
-      let CompoundField = formConfig.compoundField
+      let CompoundField = formConfig.get('compoundField')
       if (typeof CompoundField !== 'function') {
         throw new Error('Expected the CompoundField handler to be a function.')
       }
@@ -170,7 +170,7 @@ export default function compiler (store, formConfig) {
         hashCode,
         type,
         attributes,
-        children: children.map(visit.bind(this, path))
+        children: children.map(visit.bind(this, path)),
       })
     },
 
@@ -207,7 +207,7 @@ export default function compiler (store, formConfig) {
           )
         )
       })
-      let Many = formConfig.many
+      let Many = formConfig.get('many')
       if (typeof Many !== 'function') {
         throw new Error('Expected the many handler to be a function.')
       }
@@ -223,7 +223,7 @@ export default function compiler (store, formConfig) {
           attributes,
           template,
           children,
-          store
+          store,
         })
       )
     },
@@ -254,7 +254,7 @@ export default function compiler (store, formConfig) {
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
       if (!children) return
-      let Section = formConfig.section
+      let Section = formConfig.get('section')
       if (typeof Section !== 'function') {
         throw new Error('Expected the section handler to be a function.')
       }
@@ -265,7 +265,7 @@ export default function compiler (store, formConfig) {
           name,
           type,
           attributes,
-          children: children.map(visit.bind(this, path))
+          children: children.map(visit.bind(this, path)),
         })
       )
     },
@@ -294,7 +294,7 @@ export default function compiler (store, formConfig) {
       let children = definition.get(schemaMapping.group.children)
       path = path.push(schemaMapping.group.children)
       if (!children) return
-      let Group = formConfig.group
+      let Group = formConfig.get('group')
       if (typeof Group !== 'function') {
         throw new Error('Expected the group handler to be a function.')
       }
@@ -304,10 +304,10 @@ export default function compiler (store, formConfig) {
           hashCode,
           type,
           attributes,
-          children: children.map(visit.bind(this, path))
+          children: children.map(visit.bind(this, path)),
         })
       )
-    }
+    },
   }
 
   // Map over the root nodes
