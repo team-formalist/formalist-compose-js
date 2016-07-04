@@ -69,8 +69,7 @@ export default  = [
 ]
 ```
 
-Create a _composed_ form function passing in an optional config object.  
-The _composed_ form function then consumes the `AST` and returns renderable object.
+Create a _composed_ form function passing in an optional config object. The _composed_ form function then consumes the `AST` and returns renderable object.
 
 ```js
 import composeForm, {createFormConfig} from 'formalist-compose'
