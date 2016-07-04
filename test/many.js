@@ -92,7 +92,7 @@ test('it should handle `many` options', (nest) => {
         basePath,
         (contents) => ([
           'Too many things',
-          'Not enough things'
+          'Not enough things',
         ])
       )
     )

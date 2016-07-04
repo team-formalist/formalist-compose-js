@@ -27,7 +27,7 @@ export default function composer (config = {}) {
       render: () => {
         return compiler(store, config)
       },
-      store: store
+      store: store,
     }
   }
 }

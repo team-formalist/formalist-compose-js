@@ -57,7 +57,7 @@ export default function compileAttributes (attributes) {
      */
     visitValue (definition) {
       return definition.get(schemaMapping.attributes.value)
-    }
+    },
   }
 
   /**
