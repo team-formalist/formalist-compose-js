@@ -1,4 +1,4 @@
-import {createConfig} from '../../src'
+import {createFormConfig} from '../../src'
 
 const Attr = ({name, children}) => {
   return [`start-attr:${name}`, children.join(), `end-attr:${name}`]
@@ -24,7 +24,7 @@ const Section = ({name, children}) => {
   return [`start-section:${name}`, children.join(), `end-section:${name}`]
 }
 
-export default createConfig({
+export default createFormConfig({
   attr: Attr,
   group: Group,
   many: Many,
