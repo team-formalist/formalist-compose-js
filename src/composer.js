@@ -3,6 +3,10 @@ import { createStore } from 'redux'
 import { batchActions, enableBatching } from 'redux-batched-actions'
 import compiler from './compiler'
 import reducer from './reducer'
+import { externalEvents } from './constants/event-types'
+import { internalBus, externalBus } from './buses'
+
+const { FORM_CHANGE } = externalEvents
 
 /**
  * Composes forms from the passed `config`. Returning a function that can
@@ -23,11 +27,22 @@ export default function composer (config = {}) {
     store.batchDispatch = (actions) => {
       store.dispatch(batchActions(actions))
     }
+
+    // Expose the store subscriptions through the external bus
+    store.subscribe(() => externalBus.emit(FORM_CHANGE, store))
+
     return {
       render: () => {
-        return compiler(store, config)
+        return compiler(store, internalBus, config)
       },
+      // TODO Remove the full store exposure here, it shouldn’t be necessary
+      // as we’re wrapping it up in our own emitter
       store: store,
+      // Expose the store’s getState method directly
+      getState: store.getState,
+      // Expose only the on/off methods from the external bus
+      on: externalBus.on.bind(externalBus),
+      off: externalBus.off.bind(externalBus),
     }
   }
 }
