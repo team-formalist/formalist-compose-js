@@ -29,16 +29,13 @@ export default function composer (config = {}) {
     }
 
     // Expose the store subscriptions through the external bus
-    store.subscribe(() => externalBus.emit(FORM_CHANGE, store))
+    store.subscribe(() => externalBus.emit(FORM_CHANGE, store.getState))
 
     return {
       render: () => {
         return compiler(store, internalBus, config)
       },
-      // TODO Remove the full store exposure here, it shouldn’t be necessary
-      // as we’re wrapping it up in our own emitter
-      store: store,
-      // Expose the store’s getState method directly
+      // Expose the store’s getState method
       getState: store.getState,
       // Expose only the on/off methods from the external bus
       on: externalBus.on.bind(externalBus),
