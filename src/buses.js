@@ -72,7 +72,11 @@ function onComponentValid (id) {
  * @param {String} id Unique identifier for this event pairing
  */
 function onComponentInvalid (id) {
-  invalidQueue = invalidQueue.concat([id])
+  const index = invalidQueue.indexOf(id)
+  // Ensure we only keep one reference for each id
+  if (index === -1) {
+    invalidQueue = invalidQueue.concat([id])
+  }
   // If there’s a single item in the queue, send the external FORM_INVALID event
   if (invalidQueue.length === 1) {
     externalBus.emit(FORM_INVALID)
@@ -107,6 +111,11 @@ function onComponentIdle (id) {
  * @param {String} id Unique identifier for this event pairing
  */
 function onComponentBusy (id) {
+  const index = busyQueue.indexOf(id)
+  // Ensure we only keep one reference for each id
+  if (index === -1) {
+    busyQueue = busyQueue.concat([id])
+  }
   busyQueue = busyQueue.concat([id])
   // If there’s a single item in the queue, send the external FORM_BUSY event
   if (busyQueue.length === 1) {
