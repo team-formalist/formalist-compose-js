@@ -2,7 +2,7 @@
 
 A JavaScript implementation for composing an abstract syntax tree (matching the Formalist schema) into a renderable object.
 
-#### Example
+## Usage
 
 An example AST of a form
 ```js
@@ -84,6 +84,38 @@ let form = formTemplate(AST)
 form.render()
 //=> 'field:field-one-name-123-0,1,field:field-two-name-Title goes here-1,1,start-section:Main section,field:field-three-name-321-2,1,2,0,1,field:field-four-name-Content goes here-2,1,2,1,1,end-section:Main section'
 ```
+
+## API
+
+A composed form exposes the following methods:
+
+* `render` — compile and render the form based on its current state
+* `getState` — get the current state object representing the form
+* `dispatch` — dispatch an action to form’s reducer
+* `batchDispatch` — dispatch multiple actions to form’s reducer
+* `on` — bind listeners to form events
+* `off` — unbind listeners to form events
+
+## Events
+
+### External
+
+A composed form exposes an event bus, through the `on` and `off` methods, that can be used to listen to events that are relevant to a consuming application:
+
+* `change` - fired when the form’s state is updated, passes the internal store’s `getState` method
+* `busy` - fired when the form is busy (uploading a file for example)
+* `idle` - fired when the form is no longer busy
+* `invalid` - fired when a validation error has occurred
+* `valid` - fired when validation errors have been cleared
+
+### Internal
+
+A compiled form passes an internal event bus to each `field` and `many` component. This bus listens to the following events:
+
+* `field:busy` — fire when a field is busy, expects a unique ID
+* `field:idle` — fire when a field is no longer busy, expects the same unique ID to match against busy queue
+* `field:invalid` — fire when a field is invalid, expects a unique ID
+* `field:valid` — fire when a field is no longer invalid, expects the same unique ID to match against invalid queue.
 
 ## Tests
 
