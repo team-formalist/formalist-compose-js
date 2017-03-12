@@ -2,12 +2,17 @@
   "env": {
     "development": {
       "presets": [
-        "./node_modules/babel-preset-es2015"
+        "babel-preset-es2015"
       ]
     },
     "test": {
+      "plugins": [
+        ["transform-define", {
+          "TEST": true,
+        }]
+      ],
       "presets": [
-        "./node_modules/babel-preset-es2015"
+        "babel-preset-es2015"
       ]
     }
   }
