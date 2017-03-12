@@ -13,16 +13,16 @@ test('it should handle `many` options', (nest) => {
 
   nest.test('... adding a new template to the contents', (assert) => {
     // Get the initial content
-    const initialContents = form.store.getState().getIn(
+    const initialContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
     // Dispatch call to add new content from template
-    form.store.dispatch(
+    form.__test__.store.dispatch(
       manyActions.addManyContent(basePath)
     )
     // Get the updated content
-    const modifiedContents = form.store.getState().getIn(
+    const modifiedContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
@@ -33,20 +33,20 @@ test('it should handle `many` options', (nest) => {
 
   nest.test('... deleting an existing content item', (assert) => {
     // Get the initial content
-    const initialContents = form.store.getState().getIn(
+    const initialContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
     // Dispatch call to add new content from template
     // We’re removing the first item here
-    form.store.dispatch(
+    form.__test__.store.dispatch(
       manyActions.deleteManyContent(
         basePath.concat([schemaMapping.many.contents, 0])
       )
     )
 
     // Get the updated content
-    const modifiedContents = form.store.getState().getIn(
+    const modifiedContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
@@ -57,13 +57,13 @@ test('it should handle `many` options', (nest) => {
 
   nest.test('... editing the contents', (assert) => {
     // Get the initial content
-    const initialContents = form.store.getState().getIn(
+    const initialContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
     // Dispatch call to edit contents. We simply reverse the order
     // so we can check that they swap
-    form.store.dispatch(
+    form.__test__.store.dispatch(
       manyActions.editManyContents(
         basePath,
         function (val) { return initialContents.reverse() }
@@ -71,7 +71,7 @@ test('it should handle `many` options', (nest) => {
     )
 
     // Get the updated content
-    const modifiedContents = form.store.getState().getIn(
+    const modifiedContents = form.getState().getIn(
       basePath.concat(schemaMapping.many.contents)
     )
 
@@ -81,13 +81,13 @@ test('it should handle `many` options', (nest) => {
 
   nest.test('... allow validation messages to assigned', (assert) => {
     // Get the initial content
-    const initialErrors = form.store.getState().getIn(
+    const initialErrors = form.getState().getIn(
       basePath.concat(schemaMapping.many.errors)
     )
 
     // Dispatch call to edit contents. We simply reverse the order
     // so we can check that they swap
-    form.store.dispatch(
+    form.__test__.store.dispatch(
       manyActions.validateMany(
         basePath,
         (contents) => ([
@@ -98,7 +98,7 @@ test('it should handle `many` options', (nest) => {
     )
 
     // Get the updated content
-    const modifiedErrors = form.store.getState().getIn(
+    const modifiedErrors = form.getState().getIn(
       basePath.concat(schemaMapping.many.errors)
     )
 

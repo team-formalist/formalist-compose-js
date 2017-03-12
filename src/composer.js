@@ -31,7 +31,7 @@ export default function composer (config = {}) {
     // Expose the store subscriptions through the external bus
     store.subscribe(() => externalBus.emit(FORM_CHANGE, store.getState))
 
-    return {
+    const api = {
       render: () => {
         return compiler(store, internalBus, config)
       },
@@ -41,5 +41,14 @@ export default function composer (config = {}) {
       on: externalBus.on.bind(externalBus),
       off: externalBus.off.bind(externalBus),
     }
+
+    // Expose store to test environment only
+    if (TEST) {
+      api.__test__ = {
+        store,
+      }
+    }
+
+    return api
   }
 }
