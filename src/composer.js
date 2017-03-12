@@ -3,6 +3,10 @@ import { createStore } from 'redux'
 import { batchActions, enableBatching } from 'redux-batched-actions'
 import compiler from './compiler'
 import reducer from './reducer'
+import { externalEvents } from './constants/event-types'
+import { internalBus, externalBus } from './buses'
+
+const { FORM_CHANGE } = externalEvents
 
 /**
  * Composes forms from the passed `config`. Returning a function that can
@@ -23,11 +27,28 @@ export default function composer (config = {}) {
     store.batchDispatch = (actions) => {
       store.dispatch(batchActions(actions))
     }
-    return {
+
+    // Expose the store subscriptions through the external bus
+    store.subscribe(() => externalBus.emit(FORM_CHANGE, store.getState))
+
+    const api = {
       render: () => {
-        return compiler(store, config)
+        return compiler(store, internalBus, config)
       },
-      store: store,
+      // Expose the store’s getState method
+      getState: store.getState,
+      // Expose only the on/off methods from the external bus
+      on: externalBus.on.bind(externalBus),
+      off: externalBus.off.bind(externalBus),
     }
+
+    // Expose store to test environment only
+    if (TEST) {
+      api.__test__ = {
+        store,
+      }
+    }
+
+    return api
   }
 }

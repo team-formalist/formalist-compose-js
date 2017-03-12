@@ -1,4 +1,7 @@
 {
+  globals: {
+    "TEST": true
+  },
   parserOptions: {
     ecmaVersion: 6,
     ecmaFeatures: {

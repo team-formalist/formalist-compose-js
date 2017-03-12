@@ -13,15 +13,17 @@ import camelCase from './utils/camel-case'
  * It keeps track of the position of each node in the AST as a `path`. Which is
  * a series of indices that correspond to the array positions.
  *
- * @param  {Store} store A Redux 'store' containing the abstract syntax tree
- * representing the form as an Immutable List. An example of the schema can be
- * found at [TBC]
+ * @param  {Store} store A Redux store containing the abstract syntax tree
+ * representing the form as an Immutable List.
  *
- * @param  {Object} formConfig The configuration for each
+ * @param {EventEmitter} bus A single bus for internal events within the form
+ * instance.
  *
- * @return {Array} An array representing the compiled form
+ * @param  {Object} formConfig The configuration for each component.
+ *
+ * @return {Array} An array representing the compiled form.
  */
-export default function compiler (store, formConfig) {
+export default function compiler (store, bus, formConfig) {
   /**
    * Called for each node in the abstract syntax tree (AST) that makes up the
    * state contained in the store. We identify the node by `type`
@@ -90,6 +92,7 @@ export default function compiler (store, formConfig) {
           hashCode,
           path,
           store,
+          bus,
           type,
           name,
           value,
@@ -216,6 +219,8 @@ export default function compiler (store, formConfig) {
           key,
           hashCode,
           path,
+          store,
+          bus,
           contentsPath,
           name,
           type,
@@ -223,7 +228,6 @@ export default function compiler (store, formConfig) {
           attributes,
           template,
           children,
-          store,
         })
       )
     },

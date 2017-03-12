@@ -26,8 +26,21 @@ test('it should create a form instance from a composed template', (nest) => {
     assert.end()
   })
 
-  nest.test('... with a store property', (assert) => {
-    assert.ok(form.hasOwnProperty('store'), 'form has a store property')
+  nest.test('... with a getState method', (assert) => {
+    assert.ok(form.hasOwnProperty('getState'), 'form has a getState property')
+    assert.ok(isFunction(form.getState), 'getState is a function')
+    assert.end()
+  })
+
+  nest.test('... with an on method', (assert) => {
+    assert.ok(form.hasOwnProperty('on'), 'form has an on property')
+    assert.ok(isFunction(form.on), 'on is a function')
+    assert.end()
+  })
+
+  nest.test('... with an off method', (assert) => {
+    assert.ok(form.hasOwnProperty('off'), 'form has an off property')
+    assert.ok(isFunction(form.off), 'off is a function')
     assert.end()
   })
 })
@@ -35,22 +48,13 @@ test('it should create a form instance from a composed template', (nest) => {
 test('it should consume an abstract syntax tree', (nest) => {
   let formTemplate = composeForm(textForm)
   let form = formTemplate(dataSimple)
-  nest.test('... and return it as a redux store', (assert) => {
-    assert.ok(form.store.hasOwnProperty('dispatch'), 'store has a dispatch property')
-    assert.ok(isFunction(form.store.dispatch), 'store has a dispatch function')
-    assert.ok(form.store.hasOwnProperty('getState'), 'store has a getState property')
-    assert.ok(isFunction(form.store.getState), 'store has a getState function')
-    assert.ok(form.store.hasOwnProperty('subscribe'), 'store has a subscribe property')
-    assert.ok(isFunction(form.store.subscribe), 'store has a subscribe function')
-    assert.end()
-  })
   nest.test('... and convert it to an immutable list', (assert) => {
-    let list = form.store.getState()
+    let list = form.getState()
     assert.ok(List.isList(list), 'list is Immutable.List')
     assert.end()
   })
   nest.test('... with values matching the paths in the expected data', (assert) => {
-    let list = form.store.getState()
+    let list = form.getState()
 
     let expected = dataSimple[0][1][2]
     let actual = list.getIn([0, 1, 2])
@@ -105,21 +109,42 @@ test('it should render a form', (nest) => {
 })
 
 test('it should update data', (nest) => {
-  let formTemplate = composeForm(textForm)
-  let form = formTemplate(dataSimple)
-
   nest.test('... through the redux dispatcher', (assert) => {
+    let formTemplate = composeForm(textForm)
+    let form = formTemplate(dataSimple)
     let fieldPath = [0, 1]
     let expected = 'Updated value'
-    form.store.dispatch(
+    form.__test__.store.dispatch(
       fieldActions.editField(
         fieldPath,
         function (val) { return expected }
       )
     )
-    let list = form.store.getState()
+    let list = form.getState()
     let updatedValue = list.getIn(
       fieldPath.concat([schemaMapping.field.value])
+    )
+    assert.equals(updatedValue, expected)
+    assert.end()
+  })
+
+  nest.test('... and fire the change event', (assert) => {
+    let updatedValue
+    let formTemplate = composeForm(textForm)
+    let form = formTemplate(dataSimple)
+    form.on('change', (getState) => {
+      let list = getState()
+      updatedValue = list.getIn(
+        fieldPath.concat([schemaMapping.field.value])
+      )
+    })
+    let fieldPath = [0, 1]
+    let expected = 'Updated value'
+    form.__test__.store.dispatch(
+      fieldActions.editField(
+        fieldPath,
+        function (val) { return expected }
+      )
     )
     assert.equals(updatedValue, expected)
     assert.end()
