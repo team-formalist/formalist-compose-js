@@ -1,6 +1,6 @@
 {
   "name": "formalist-compose",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "homepage": "https://github.com/icelab/formalist-compose",
   "main": "lib/index.js",
