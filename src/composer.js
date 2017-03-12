@@ -42,11 +42,9 @@ export default function composer (config = {}) {
       off: externalBus.off.bind(externalBus),
     }
 
-    // Expose store to test environment only
-    if (TEST) {
-      api.__test__ = {
-        store,
-      }
+    // Expose store through private convention environment only
+    api.__test__ = {
+      store,
     }
 
     return api
