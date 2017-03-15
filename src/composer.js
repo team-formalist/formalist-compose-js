@@ -4,7 +4,7 @@ import { batchActions, enableBatching } from 'redux-batched-actions'
 import compiler from './compiler'
 import reducer from './reducer'
 import { externalEvents } from './constants/event-types'
-import { internalBus, externalBus } from './buses'
+import createBuses from './buses'
 
 const { FORM_CHANGE } = externalEvents
 
@@ -27,6 +27,9 @@ export default function composer (config = {}) {
     store.batchDispatch = (actions) => {
       store.dispatch(batchActions(actions))
     }
+
+    // Create per-instance buses
+    const { internalBus, externalBus } = createBuses()
 
     // Expose the store subscriptions through the external bus
     store.subscribe(() => externalBus.emit(FORM_CHANGE, store.getState))
