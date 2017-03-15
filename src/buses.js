@@ -36,7 +36,6 @@ const {
 } = internalEvents
 
 export default function createBuses () {
-
   // Create two event buses one for internal use by the form renderer,
   // and one for external use by the consuming application.
   const internalBus = new Emitter()
