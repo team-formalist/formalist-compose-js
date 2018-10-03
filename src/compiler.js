@@ -38,7 +38,7 @@ export default function compiler (store, bus, formConfig) {
    *
    * @return {Function} Result of the contextual function
    */
-  const visit = ({path, node, index}) => {
+  const visit = ({path, namePath, node, index}) => {
     // Update the current path context
     path = path.push(index, 1)
     // Extract data from the AST based on the schema
@@ -48,7 +48,7 @@ export default function compiler (store, bus, formConfig) {
     // Use the type to create a reference to a `visit` method
     // E.g., `field` -> `visitField(...)`
     var visitMethod = 'visit' + camelCase(type, true)
-    return destinations[visitMethod]({path, definition, index})
+    return destinations[visitMethod]({path, namePath, definition, index})
   }
 
   /**
@@ -72,7 +72,7 @@ export default function compiler (store, bus, formConfig) {
      *
      * @return {Function} Result of the relevant `fields[type]` function
      */
-    visitField ({path, definition, index}) {
+    visitField ({path, namePath, definition, index}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.field.name)
@@ -82,6 +82,7 @@ export default function compiler (store, bus, formConfig) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
       )
+      namePath = `${namePath}.${name}`
       let Field = formConfig.get('field', type)
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -91,6 +92,7 @@ export default function compiler (store, bus, formConfig) {
           key,
           hashCode,
           path,
+          namePath,
           store,
           bus,
           type,
@@ -115,7 +117,7 @@ export default function compiler (store, bus, formConfig) {
      *
      * @return {ImmutableList} A list of the attr block’s child nodes
      */
-    visitAttr ({path, definition}) {
+    visitAttr ({path, namePath, definition}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.attr.name)
@@ -125,6 +127,7 @@ export default function compiler (store, bus, formConfig) {
         definition.get(schemaMapping.attr.attributes)
       )
       let children = definition.get(schemaMapping.attr.children)
+      namePath = `${namePath}.${name}`
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.get('attr')
       if (typeof Attr !== 'function') {
@@ -137,7 +140,7 @@ export default function compiler (store, bus, formConfig) {
         type,
         errors,
         attributes,
-        children: children.map((node, index) => visit.call(this, {path, node, index})),
+        children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
       })
     },
 
@@ -155,7 +158,7 @@ export default function compiler (store, bus, formConfig) {
      *
      * @return {ImmutableList} A list of the CompoundField block’s child nodes
      */
-    visitCompoundField ({path, definition}) {
+    visitCompoundField ({path, namePath, definition}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let type = definition.get(schemaMapping.compoundField.type)
@@ -173,7 +176,7 @@ export default function compiler (store, bus, formConfig) {
         hashCode,
         type,
         attributes,
-        children: children.map((node, index) => visit.call(this, {path, node, index})),
+        children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
       })
     },
 
@@ -190,7 +193,7 @@ export default function compiler (store, bus, formConfig) {
      * @return {Function} Result of the relevant many function from the config
      * (including the result of its children)
      */
-    visitMany ({path, definition}) {
+    visitMany ({path, namePath, definition}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let name = definition.get(schemaMapping.many.name)
@@ -202,9 +205,14 @@ export default function compiler (store, bus, formConfig) {
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
       let contentsPath = path.push(schemaMapping.many.contents)
+      namePath = `${namePath}.${name}`
       let children = contents.map((content, index) => {
         return content.map(
-          (node, index) => visit.call(this, {path: contentsPath.push(index), node, index})
+          (node, index) => {
+            // Build up a namePath for the children
+            let childNamePath = `${namePath}.${index}`
+            return visit.call(this, {path: contentsPath.push(index), namePath: childNamePath, node, index})
+          }
         )
       })
       let Many = formConfig.get('many')
@@ -216,6 +224,7 @@ export default function compiler (store, bus, formConfig) {
           key,
           hashCode,
           path,
+          namePath,
           store,
           bus,
           contentsPath,
@@ -244,9 +253,10 @@ export default function compiler (store, bus, formConfig) {
      * @return {Function} Result of the relevant section function from the
      * config (including the result of its children)
      */
-    visitSection ({path, definition}) {
+    visitSection ({path, namePath, definition}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
+      // Sections have name attrs but it doesn't affect the namePath
       let name = definition.get(schemaMapping.section.name)
       let type = definition.get(schemaMapping.section.type)
       let attributes = compileAttributes(
@@ -266,7 +276,7 @@ export default function compiler (store, bus, formConfig) {
           name,
           type,
           attributes,
-          children: children.map((node, index) => visit.call(this, {path, node, index})),
+          children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
         })
       )
     },
@@ -285,7 +295,7 @@ export default function compiler (store, bus, formConfig) {
      * @return {Function} Result of the relevant group function from the
      * config (including the result of its children)
      */
-    visitGroup ({path, definition}) {
+    visitGroup ({path, namePath, definition}) {
       let key = path.hashCode()
       let hashCode = definition.hashCode()
       let type = definition.get(schemaMapping.group.type)
@@ -305,7 +315,7 @@ export default function compiler (store, bus, formConfig) {
           hashCode,
           type,
           attributes,
-          children: children.map((node, index) => visit.call(this, {path, node, index})),
+          children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
         })
       )
     },
