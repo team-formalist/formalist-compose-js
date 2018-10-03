@@ -51,6 +51,10 @@ export default function compiler (store, bus, formConfig) {
     return destinations[visitMethod]({path, namePath, definition, index})
   }
 
+  function appendNamePath(namePath, addition) {
+    return namePath != null ? `${namePath}.${addition}` : addition;
+  }
+
   /**
    * A reference object so we can call our dynamic functions in `visit`
    * @type {Object}
@@ -82,7 +86,8 @@ export default function compiler (store, bus, formConfig) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.field.attributes)
       )
-      namePath = `${namePath}.${name}`
+      namePath = appendNamePath(namePath, name)
+      console.log("field", namePath)
       let Field = formConfig.get('field', type)
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
@@ -127,7 +132,7 @@ export default function compiler (store, bus, formConfig) {
         definition.get(schemaMapping.attr.attributes)
       )
       let children = definition.get(schemaMapping.attr.children)
-      namePath = `${namePath}.${name}`
+      namePath = appendNamePath(namePath, name)
       path = path.push(schemaMapping.attr.children)
       let Attr = formConfig.get('attr')
       if (typeof Attr !== 'function') {
@@ -205,12 +210,12 @@ export default function compiler (store, bus, formConfig) {
       let template = definition.get(schemaMapping.many.template)
       let contents = definition.get(schemaMapping.many.contents)
       let contentsPath = path.push(schemaMapping.many.contents)
-      namePath = `${namePath}.${name}`
-      let children = contents.map((content, index) => {
+      namePath = appendNamePath(namePath, name)
+      let children = contents.map((content, contentIndex) => {
         return content.map(
           (node, index) => {
             // Build up a namePath for the children
-            let childNamePath = `${namePath}.${index}`
+            let childNamePath = appendNamePath(namePath, contentIndex)
             return visit.call(this, {path: contentsPath.push(index), namePath: childNamePath, node, index})
           }
         )
