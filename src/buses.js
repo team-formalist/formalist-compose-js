@@ -21,20 +21,6 @@ import { externalEvents, internalEvents } from './constants/event-types'
  * bus.
  */
 
-const {
-  FORM_VALID,
-  FORM_INVALID,
-  FORM_BUSY,
-  FORM_IDLE,
-} = externalEvents
-
-const {
-  FIELD_VALID,
-  FIELD_INVALID,
-  FIELD_BUSY,
-  FIELD_IDLE,
-} = internalEvents
-
 export default function createBuses () {
   // Create two event buses one for internal use by the form renderer,
   // and one for external use by the consuming application.
@@ -60,7 +46,7 @@ export default function createBuses () {
     }
     // If the queue is empty, send the external FORM_VALID event
     if (invalidQueue.length === 0) {
-      externalBus.emit(FORM_VALID)
+      externalBus.emit(externalEvents.FORM_VALID)
     }
   }
 
@@ -80,7 +66,7 @@ export default function createBuses () {
     }
     // If there’s a single item in the queue, send the external FORM_INVALID event
     if (invalidQueue.length === 1) {
-      externalBus.emit(FORM_INVALID)
+      externalBus.emit(externalEvents.FORM_INVALID)
     }
   }
 
@@ -99,7 +85,7 @@ export default function createBuses () {
     }
     // If the queue is empty, send the external FORM_IDLE event
     if (busyQueue.length === 0) {
-      externalBus.emit(FORM_IDLE)
+      externalBus.emit(externalEvents.FORM_IDLE)
     }
   }
 
@@ -119,15 +105,57 @@ export default function createBuses () {
     }
     // If there’s a single item in the queue, send the external FORM_BUSY event
     if (busyQueue.length === 1) {
-      externalBus.emit(FORM_BUSY)
+      externalBus.emit(externalEvents.FORM_BUSY)
     }
   }
 
+  /**
+   * onInternalFieldChange
+   *
+   * Bubble up internal field change events to the external event bus
+   */
+  function onInternalFieldChange () {
+    externalBus.emit(externalEvents.FIELD_CHANGE, arguments)
+  }
+
+  /**
+   * onInternalFieldDeleted
+   *
+   * Bubble up internal field deleted events to the external event bus
+   */
+  function onInternalFieldDeleted () {
+    externalBus.emit(externalEvents.FIELD_DELETED, arguments)
+  }
+
   // Bind the listeners to the internal bus
-  internalBus.on(FIELD_VALID, onComponentValid)
-  internalBus.on(FIELD_INVALID, onComponentInvalid)
-  internalBus.on(FIELD_IDLE, onComponentIdle)
-  internalBus.on(FIELD_BUSY, onComponentBusy)
+  internalBus.on(internalEvents.FIELD_VALID, onComponentValid)
+  internalBus.on(internalEvents.FIELD_INVALID, onComponentInvalid)
+  internalBus.on(internalEvents.FIELD_IDLE, onComponentIdle)
+  internalBus.on(internalEvents.FIELD_BUSY, onComponentBusy)
+  internalBus.on(internalEvents.FIELD_CHANGE, onInternalFieldChange)
+  internalBus.on(internalEvents.FIELD_DELETED, onInternalFieldDeleted)
+
+  /**
+   * onExternalFieldEdit
+   *
+   * Pass field edit events to the internal bus
+   */
+  function onExternalFieldEdit () {
+    internalBus.emit(internalEvents.FIELD_EDIT, arguments)
+  }
+
+  /**
+   * onExternalFieldDelete
+   *
+   * Pass field delete events to the internal bus
+   */
+  function onExternalFieldDelete () {
+    internalBus.emit(internalEvents.FIELD_DELETE, arguments)
+  }
+
+  // Bind listeners to external bus
+  externalBus.on(externalEvents.FIELD_EDIT, onExternalFieldEdit)
+  externalBus.on(externalEvents.FIELD_DELETE, onExternalFieldDelete)
 
   return {
     internalBus,
