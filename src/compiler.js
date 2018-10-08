@@ -23,11 +23,11 @@ import * as manyActions from './actions/many'
  * @param {EventEmitter} bus A single bus for internal events within the form
  * instance.
  *
- * @param  {Object} formConfig The configuration for each component.
+ * @param  {Object} config The configuration for each component.
  *
  * @return {Array} An array representing the compiled form.
  */
-export default function compiler (store, bus, formConfig, pathMapping) {
+export default function compiler ({store, bus, config, pathMapping}) {
   /**
    * Called for each node in the abstract syntax tree (AST) that makes up the
    * state contained in the store. We identify the node by `type`
@@ -67,7 +67,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
 
     /**
      * Called for each node that identifies as a field. Identifies the field
-     * _type_ function from the `formConfig`
+     * _type_ function from the `config`
      *
      * @param  {ImmutableList} path A series of indices that defined the
      * contextual 'path' of a node in the AST. For example, `[0,1,0,1,1,3,0]`.
@@ -91,11 +91,10 @@ export default function compiler (store, bus, formConfig, pathMapping) {
         definition.get(schemaMapping.field.attributes)
       )
       namePath = appendNamePath(namePath, name)
-      let Field = formConfig.get('field', type)
+      let Field = config.get('field', type)
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
       }
-      pathMapping[namePath] = path
 
       // Extract validation rules
       const validationRules = attributes.get('validation')
@@ -119,7 +118,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
           editedValue = editedValue.toJS()
         }
 
-        bus.emit(internalEvents.FIELD_CHANGE, { namePath })
+        bus.emit(internalEvents.FIELD_CHANGE, { namePath, value: editedValue })
 
         return store.batchDispatch([
           fieldActions.edit(path, valFunc),
@@ -131,6 +130,13 @@ export default function compiler (store, bus, formConfig, pathMapping) {
       const remove = () => {
         bus.emit(internalEvents.FIELD_REMOVED, { namePath })
         return store.dispatch(fieldActions.remove(path))
+      }
+
+      // Build path mapping
+      pathMapping[namePath] = {
+        path,
+        edit,
+        remove,
       }
 
       return (
@@ -176,7 +182,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
       let children = definition.get(schemaMapping.attr.children)
       namePath = appendNamePath(namePath, name)
       path = path.push(schemaMapping.attr.children)
-      let Attr = formConfig.get('attr')
+      let Attr = config.get('attr')
       if (typeof Attr !== 'function') {
         throw new Error('Expected the attr handler to be a function.')
       }
@@ -214,7 +220,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
       )
       let children = definition.get(schemaMapping.compoundField.children)
       path = path.push(schemaMapping.compoundField.children)
-      let CompoundField = formConfig.get('compoundField')
+      let CompoundField = config.get('compoundField')
       if (typeof CompoundField !== 'function') {
         throw new Error('Expected the CompoundField handler to be a function.')
       }
@@ -262,7 +268,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
           }
         )
       })
-      let Many = formConfig.get('many')
+      let Many = config.get('many')
       if (typeof Many !== 'function') {
         throw new Error('Expected the many handler to be a function.')
       }
@@ -351,7 +357,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
       let children = definition.get(schemaMapping.section.children)
       path = path.push(schemaMapping.section.children)
       if (!children) return
-      let Section = formConfig.get('section')
+      let Section = config.get('section')
       if (typeof Section !== 'function') {
         throw new Error('Expected the section handler to be a function.')
       }
@@ -391,7 +397,7 @@ export default function compiler (store, bus, formConfig, pathMapping) {
       let children = definition.get(schemaMapping.group.children)
       path = path.push(schemaMapping.group.children)
       if (!children) return
-      let Group = formConfig.get('group')
+      let Group = config.get('group')
       if (typeof Group !== 'function') {
         throw new Error('Expected the group handler to be a function.')
       }
