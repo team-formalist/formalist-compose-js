@@ -36,18 +36,18 @@ export default function composer (config = {}) {
     // Expose the store subscriptions through the external bus
     store.subscribe(() => externalBus.emit(FORM_CHANGE, store.getState))
 
-    // Path mapping
+    // Mapping
     const pathMapping = {}
 
     const api = {
       render: () => {
-        return compiler(store, internalBus, config, pathMapping)
+        return compiler({store, bus: internalBus, config, pathMapping})
       },
       // Expose the store’s getState method
       getState: store.getState,
       // Get value of a field by named path
       getValue: namePath => {
-        const path = pathMapping[namePath]
+        const {path} = pathMapping[namePath]
         if (path != null) {
           let valuePath = path.concat([schemaMapping.field.value])
           return store.getState().getIn(valuePath)
@@ -55,9 +55,9 @@ export default function composer (config = {}) {
       },
       // Set value of a field by named path
       setValue: (namePath, value) => {
-        const path = pathMapping[namePath]
-        if (path != null) {
-          store.dispatch(editField(path, value))
+        const {edit} = pathMapping[namePath]
+        if (edit != null) {
+          return edit(value)
         }
       },
       // Expose only the on/off methods from the external bus
