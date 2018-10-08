@@ -17,7 +17,7 @@ import * as types from './constants/action-types'
  */
 export default function reducer (state, action) {
   switch (action.type) {
-    case types.DELETE_FIELD: {
+    case types.REMOVE_FIELD: {
       return state.deleteIn(action.path)
     }
 
@@ -36,7 +36,7 @@ export default function reducer (state, action) {
       return state
     }
 
-    case types.ADD_MANY_CONTENT: {
+    case types.ADD_MANY_CHILD: {
       let templatePath = action.path.concat([schemaMapping.many.template])
       let template = state.getIn(templatePath)
       let contentsPath = action.path.concat([schemaMapping.many.contents])
@@ -45,16 +45,16 @@ export default function reducer (state, action) {
       return state.setIn(contentsPath, contents)
     }
 
-    case types.DELETE_MANY_CONTENT: {
+    case types.REMOVE_MANY_CHILD: {
       return state.deleteIn(action.path)
     }
 
-    case types.EDIT_MANY_CONTENTS: {
+    case types.EDIT_MANY_CHILDREN: {
       let contentsPath = action.path.concat([schemaMapping.many.contents])
       return state.updateIn(contentsPath, action.contents)
     }
 
-    case types.REORDER_MANY_CONTENTS: {
+    case types.REORDER_MANY_CHILDREN: {
       let contentsPath = action.path.concat([schemaMapping.many.contents])
       let contents = state.getIn(contentsPath)
       let updatedContents = Immutable.fromJS(action.order).map((index) => (

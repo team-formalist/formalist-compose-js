@@ -8,9 +8,7 @@ export const externalEvents = {
   'FORM_VALID': 'valid',
   'FORM_INVALID': 'invalid',
   'FIELD_CHANGE': 'field:change',
-  'FIELD_EDIT': 'field:edit',
-  'FIELD_DELETE': 'field:delete',
-  'FIELD_DELETED': 'field:deleted',
+  'FIELD_REMOVED': 'field:removed',
 }
 
 /**
@@ -22,7 +20,5 @@ export const internalEvents = {
   'FIELD_VALID': 'field:valid',
   'FIELD_INVALID': 'field:invalid',
   'FIELD_CHANGE': 'field:change',
-  'FIELD_EDIT': 'field:edit',
-  'FIELD_DELETE': 'field:delete',
-  'FIELD_DELETED': 'field:deleted',
+  'FIELD_REMOVED': 'field:removed',
 }
