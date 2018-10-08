@@ -114,17 +114,17 @@ export default function createBuses () {
    *
    * Bubble up internal field change events to the external event bus
    */
-  function onInternalFieldChange () {
-    externalBus.emit(externalEvents.FIELD_CHANGE, arguments)
+  function onInternalFieldChange (args) {
+    externalBus.emit(externalEvents.FIELD_CHANGE, args)
   }
 
   /**
-   * onInternalFieldDeleted
+   * onInternalFieldRemoved
    *
-   * Bubble up internal field deleted events to the external event bus
+   * Bubble up internal field removed events to the external event bus
    */
-  function onInternalFieldDeleted () {
-    externalBus.emit(externalEvents.FIELD_DELETED, arguments)
+  function onInternalFieldRemoved (args) {
+    externalBus.emit(externalEvents.FIELD_REMOVED, args)
   }
 
   // Bind the listeners to the internal bus
@@ -133,29 +133,7 @@ export default function createBuses () {
   internalBus.on(internalEvents.FIELD_IDLE, onComponentIdle)
   internalBus.on(internalEvents.FIELD_BUSY, onComponentBusy)
   internalBus.on(internalEvents.FIELD_CHANGE, onInternalFieldChange)
-  internalBus.on(internalEvents.FIELD_DELETED, onInternalFieldDeleted)
-
-  /**
-   * onExternalFieldEdit
-   *
-   * Pass field edit events to the internal bus
-   */
-  function onExternalFieldEdit () {
-    internalBus.emit(internalEvents.FIELD_EDIT, arguments)
-  }
-
-  /**
-   * onExternalFieldDelete
-   *
-   * Pass field delete events to the internal bus
-   */
-  function onExternalFieldDelete () {
-    internalBus.emit(internalEvents.FIELD_DELETE, arguments)
-  }
-
-  // Bind listeners to external bus
-  externalBus.on(externalEvents.FIELD_EDIT, onExternalFieldEdit)
-  externalBus.on(externalEvents.FIELD_DELETE, onExternalFieldDelete)
+  internalBus.on(internalEvents.FIELD_REMOVED, onInternalFieldRemoved)
 
   return {
     internalBus,

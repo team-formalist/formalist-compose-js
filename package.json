@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "component-emitter": "1.2.1",
+    "formalist-validation": "^1.0.0",
     "immutable": "^3.7.6",
     "redux": "^3.3.1",
     "redux-batched-actions": "^0.1.2"

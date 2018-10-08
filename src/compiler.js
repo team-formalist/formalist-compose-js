@@ -1,7 +1,11 @@
 import { List } from 'immutable'
+import validation from 'formalist-validation'
 import compileAttributes from './compile-attributes'
 import schemaMapping from './schema-mapping'
 import camelCase from './utils/camel-case'
+import { internalEvents } from './constants/event-types'
+import * as fieldActions from './actions/fields'
+import * as manyActions from './actions/many'
 
 /**
  * Compiler
@@ -23,7 +27,7 @@ import camelCase from './utils/camel-case'
  *
  * @return {Array} An array representing the compiled form.
  */
-export default function compiler (store, bus, formConfig) {
+export default function compiler (store, bus, formConfig, pathMapping) {
   /**
    * Called for each node in the abstract syntax tree (AST) that makes up the
    * state contained in the store. We identify the node by `type`
@@ -51,8 +55,8 @@ export default function compiler (store, bus, formConfig) {
     return destinations[visitMethod]({path, namePath, definition, index})
   }
 
-  function appendNamePath(namePath, addition) {
-    return namePath != null ? `${namePath}.${addition}` : addition;
+  function appendNamePath (namePath, addition) {
+    return namePath != null ? `${namePath}.${addition}` : addition
   }
 
   /**
@@ -87,24 +91,62 @@ export default function compiler (store, bus, formConfig) {
         definition.get(schemaMapping.field.attributes)
       )
       namePath = appendNamePath(namePath, name)
-      console.log("field", namePath)
       let Field = formConfig.get('field', type)
       if (typeof Field !== 'function') {
         throw new Error(`Expected the ${type} field handler to be a function.`)
       }
+      pathMapping[namePath] = path
+
+      // Extract validation rules
+      const validationRules = attributes.get('validation')
+      ? attributes.get('validation').toJS()
+      : null
+
+      // Create methods to pass
+      // Edit field value
+      const edit = val => {
+        // Ensure that the value is a function
+        // https://facebook.github.io/immutable-js/docs/#/updateIn
+        const valFunc = typeof val === 'function' ? val : previousValue => val
+
+        // Curry with the form validation schema
+        let validator = validation(validationRules)
+
+        let editedValue = valFunc()
+        // Ensure we're not passing Immutable stuff through
+        // to the validator
+        if (List.isList(editedValue)) {
+          editedValue = editedValue.toJS()
+        }
+
+        bus.emit(internalEvents.FIELD_CHANGE, { namePath })
+
+        return store.batchDispatch([
+          fieldActions.edit(path, valFunc),
+          fieldActions.validate(path, validator(editedValue)),
+        ])
+      }
+
+      // Remove field entirely
+      const remove = () => {
+        bus.emit(internalEvents.FIELD_REMOVED, { namePath })
+        return store.dispatch(fieldActions.remove(path))
+      }
+
       return (
         Field({
           key,
           hashCode,
           path,
           namePath,
-          store,
           bus,
           type,
           name,
           value,
           errors,
           attributes,
+          edit,
+          remove,
         })
       )
     },
@@ -216,7 +258,7 @@ export default function compiler (store, bus, formConfig) {
           (node, index) => {
             // Build up a namePath for the children
             let childNamePath = appendNamePath(namePath, contentIndex)
-            return visit.call(this, {path: contentsPath.push(index), namePath: childNamePath, node, index})
+            return visit.call(this, {path: contentsPath.push(contentIndex), namePath: childNamePath, node, index})
           }
         )
       })
@@ -224,6 +266,41 @@ export default function compiler (store, bus, formConfig) {
       if (typeof Many !== 'function') {
         throw new Error('Expected the many handler to be a function.')
       }
+      pathMapping[namePath] = path
+
+      // Extract validation rules
+      const validationRules = attributes.get('validation')
+      ? attributes.get('validation').toJS()
+      : null
+
+      // Create methods to pass
+      const addChild = () => {
+        return store.batchDispatch([
+          manyActions.addChild(path),
+          manyActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const removeChild = index => {
+        let childPath = contentsPath.push(index)
+
+        return store.batchDispatch([
+          manyActions.removeChild(childPath),
+          manyActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const reorderChildren = newOrder => {
+        return store.batchDispatch([
+          manyActions.reorderChildren(path, newOrder),
+          manyActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const editChildren = newChildren => {
+        return store.batchDispatch([
+          manyActions.editChildren(path, newChildren),
+          manyActions.validate(path, validation(validationRules)),
+        ])
+      }
+
       return (
         Many({
           key,
@@ -239,6 +316,10 @@ export default function compiler (store, bus, formConfig) {
           attributes,
           template,
           children,
+          addChild,
+          removeChild,
+          reorderChildren,
+          editChildren,
         })
       )
     },
