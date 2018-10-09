@@ -47,17 +47,23 @@ export default function composer (config = {}) {
       getState: store.getState,
       // Get value of a field by named path
       getValue: namePath => {
-        const {path} = pathMapping[namePath]
-        if (path != null) {
+        const fieldMapping = pathMapping[namePath]
+        if (fieldMapping != null) {
+          const { path } = fieldMapping
           let valuePath = path.concat([schemaMapping.field.value])
           return store.getState().getIn(valuePath)
+        } else {
+          throw new Error(`No component matching namePath: ${namePath}`)
         }
       },
       // Set value of a field by named path
       setValue: (namePath, value) => {
-        const {edit} = pathMapping[namePath]
-        if (edit != null) {
+        const fieldMapping = pathMapping[namePath]
+        if (fieldMapping != null) {
+          const { edit } = fieldMapping
           return edit(value)
+        } else {
+          throw new Error(`No component matching namePath: ${namePath}`)
         }
       },
       // Expose only the on/off methods from the external bus
