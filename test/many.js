@@ -19,7 +19,7 @@ test('it should handle `many` options', (nest) => {
 
     // Dispatch call to add new content from template
     form.__test__.store.dispatch(
-      manyActions.addManyContent(basePath)
+      manyActions.addChild(basePath)
     )
     // Get the updated content
     const modifiedContents = form.getState().getIn(
@@ -40,7 +40,7 @@ test('it should handle `many` options', (nest) => {
     // Dispatch call to add new content from template
     // We’re removing the first item here
     form.__test__.store.dispatch(
-      manyActions.deleteManyContent(
+      manyActions.removeChild(
         basePath.concat([schemaMapping.many.contents, 0])
       )
     )
@@ -64,7 +64,7 @@ test('it should handle `many` options', (nest) => {
     // Dispatch call to edit contents. We simply reverse the order
     // so we can check that they swap
     form.__test__.store.dispatch(
-      manyActions.editManyContents(
+      manyActions.editChildren(
         basePath,
         function (val) { return initialContents.reverse() }
       )
@@ -88,7 +88,7 @@ test('it should handle `many` options', (nest) => {
     // Dispatch call to edit contents. We simply reverse the order
     // so we can check that they swap
     form.__test__.store.dispatch(
-      manyActions.validateMany(
+      manyActions.validate(
         basePath,
         (contents) => ([
           'Too many things',
