@@ -51,7 +51,7 @@ export default function reducer (state, action) {
 
     case types.EDIT_MANY_CHILDREN: {
       let contentsPath = action.path.concat([schemaMapping.many.contents])
-      return state.updateIn(contentsPath, action.contents)
+      return state.updateIn(contentsPath, action.children)
     }
 
     case types.REORDER_MANY_CHILDREN: {
