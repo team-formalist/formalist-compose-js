@@ -115,7 +115,7 @@ test('it should update data', (nest) => {
     let fieldPath = [0, 1]
     let expected = 'Updated value'
     form.__test__.store.dispatch(
-      fieldActions.editField(
+      fieldActions.edit(
         fieldPath,
         function (val) { return expected }
       )
@@ -141,7 +141,7 @@ test('it should update data', (nest) => {
     let fieldPath = [0, 1]
     let expected = 'Updated value'
     form.__test__.store.dispatch(
-      fieldActions.editField(
+      fieldActions.edit(
         fieldPath,
         function (val) { return expected }
       )
