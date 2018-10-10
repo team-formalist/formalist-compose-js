@@ -1,7 +1,6 @@
 import Immutable from 'immutable'
 import { createStore } from 'redux'
 import { batchActions, enableBatching } from 'redux-batched-actions'
-import { editField } from './actions/fields'
 import compiler from './compiler'
 import reducer from './reducer'
 import schemaMapping from './schema-mapping'
