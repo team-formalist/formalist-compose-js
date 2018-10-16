@@ -128,12 +128,12 @@ export default function createBuses () {
   }
 
   /**
-   * onInternalFormInitialised
+   * onInternalFormInitialized
    *
-   * Bubble up internal form initialised events to the external event bus
+   * Bubble up internal form initialized events to the external event bus
    */
-  function onInternalFormInitialised (args) {
-    externalBus.emit(externalEvents.FORM_INITIALISED, args)
+  function onInternalFormInitialized (args) {
+    externalBus.emit(externalEvents.FORM_INITIALIZED, args)
   }
 
   /**
@@ -152,7 +152,7 @@ export default function createBuses () {
   internalBus.on(internalEvents.FIELD_BUSY, onComponentBusy)
   internalBus.on(internalEvents.FIELD_CHANGE, onInternalFieldChange)
   internalBus.on(internalEvents.FIELD_REMOVED, onInternalFieldRemoved)
-  internalBus.on(internalEvents.FORM_INITIALISED, onInternalFormInitialised)
+  internalBus.on(internalEvents.FORM_INITIALIZED, onInternalFormInitialized)
   internalBus.on(internalEvents.FORM_REMOVED, onInternalFormRemoved)
 
   return {

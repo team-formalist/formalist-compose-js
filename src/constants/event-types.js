@@ -9,7 +9,7 @@ export const externalEvents = {
   FORM_INVALID: 'invalid',
   FIELD_CHANGE: 'field:change',
   FIELD_REMOVED: 'field:removed',
-  FORM_INITIALISED: 'form:initialised',
+  FORM_INITIALIZED: 'form:initialized',
   FORM_REMOVED: 'field:removed',
 }
 
@@ -23,6 +23,6 @@ export const internalEvents = {
   FIELD_INVALID: 'field:invalid',
   FIELD_CHANGE: 'field:change',
   FIELD_REMOVED: 'field:removed',
-  FORM_INITIALISED: 'form:initialised',
+  FORM_INITIALIZED: 'form:initialized',
   FORM_REMOVED: 'field:removed',
 }
