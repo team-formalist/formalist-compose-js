@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v3.0.1 2018-10-16
+
+* Use americanized spelling for initialize references
+
 # v3.0.0 2018-10-11
 
 * [Add named paths and API for modifying field data](https://github.com/icelab/formalist-compose/pull/20). This changes the way actions are expected to be called by consuming forms.
