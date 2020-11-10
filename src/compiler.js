@@ -6,6 +6,7 @@ import camelCase from './utils/camel-case'
 import { internalEvents } from './constants/event-types'
 import * as fieldActions from './actions/fields'
 import * as manyActions from './actions/many'
+import * as manyChildFormsActions from './actions/many-child-forms'
 
 /**
  * Compiler
@@ -328,6 +329,122 @@ export default function compiler ({store, bus, config, pathMapping}) {
           editChildren,
         })
       )
+    },
+
+    /**
+     * Called for each node that identifies as a 'manyForms'.
+     *
+     * @param  {ImmutableList} path A series of indices that defined the
+     * contextual 'path' of a node in the AST. For example, `[0,1,0,1,1,3,0]`.
+     * Stored as ImmutableList to avoid mutation issues while we recurse.
+     *
+     * @param  {ImmutableList} definition The list that defines the data related
+     * to the manyForms block.
+     *
+     * @return {Function} Result of the relevant manyForms function from the config
+     * (including the result of its children)
+     */
+    visitManyChildForms ({path, namePath, definition}) {
+      let key = path.hashCode()
+      let hashCode = definition.hashCode()
+      let name = definition.get(schemaMapping.manyChildForms.name)
+      let type = definition.get(schemaMapping.manyChildForms.type)
+      let errors = definition.get(schemaMapping.manyChildForms.errors)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.manyChildForms.attributes)
+      )
+      let children = definition.get(schemaMapping.manyChildForms.children)
+      path = path.push(schemaMapping.manyChildForms.children)
+      if (!children) return
+
+      let contents = definition.get(schemaMapping.manyChildForms.contents)
+      let contentsPath = path.push(schemaMapping.manyChildForms.contents)
+      namePath = appendNamePath(namePath, name)
+      if (!children) return
+
+
+      let ManyChildForms = config.get('manyChildForms')
+      if (typeof ManyChildForms !== 'function') {
+        throw new Error('Expected the manyChildForms handler to be a function.')
+      }
+
+      // Extract validation rules
+      const validationRules = attributes.get('validation')
+      ? attributes.get('validation').toJS()
+      : null
+
+      // Create methods to pass
+      const addChild = (formName) => {
+        return store.batchDispatch([
+          manyChildFormsActions.addChild(path, formName),
+          manyChildFormsActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const removeChild = index => {
+        let childPath = contentsPath.push(index)
+
+        return store.batchDispatch([
+          manyChildFormsActions.removeChild(childPath),
+          manyChildFormsActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const reorderChildren = newOrder => {
+        return store.batchDispatch([
+          manyChildFormsActions.reorderChildren(path, newOrder),
+          manyChildFormsActions.validate(path, validation(validationRules)),
+        ])
+      }
+      const editChildren = newChildren => {
+        return store.batchDispatch([
+          manyChildFormsActions.editChildren(path, newChildren),
+          manyChildFormsActions.validate(path, validation(validationRules)),
+        ])
+      }
+
+      return (
+        ManyChildForms({
+          key,
+          hashCode,
+          path,
+          namePath,
+          store,
+          bus,
+          contentsPath,
+          name,
+          type,
+          errors,
+          attributes,
+          addChild,
+          removeChild,
+          reorderChildren,
+          editChildren,
+          children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
+        })
+      )
+    },
+
+    visitChildForm ({path, namePath, definition}) {
+      let key = path.hashCode()
+      let hashCode = definition.hashCode()
+      let type = definition.get(schemaMapping.childForm.type)
+      let name = definition.get(schemaMapping.childForm.name)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.childForm.attributes)
+      )
+      let children = definition.get(schemaMapping.childForm.children)
+      path = path.push(schemaMapping.childForm.children)
+      let ChildForm = config.get('childForm')
+      if (typeof ChildForm !== 'function') {
+        throw new Error('Expected the ChildForm handler to be a function.')
+      }
+      return ChildForm({
+        key,
+        hashCode,
+        name,
+        type,
+        attributes,
+        children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
+      })
     },
 
     /**
