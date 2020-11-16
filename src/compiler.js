@@ -354,14 +354,11 @@ export default function compiler ({store, bus, config, pathMapping}) {
         definition.get(schemaMapping.manyChildForms.attributes)
       )
       let children = definition.get(schemaMapping.manyChildForms.children)
-      path = path.push(schemaMapping.manyChildForms.children)
+      let childrenPath = path.push(schemaMapping.manyChildForms.children)
       if (!children) return
 
-      let contents = definition.get(schemaMapping.manyChildForms.contents)
-      let contentsPath = path.push(schemaMapping.manyChildForms.contents)
       namePath = appendNamePath(namePath, name)
       if (!children) return
-
 
       let ManyChildForms = config.get('manyChildForms')
       if (typeof ManyChildForms !== 'function') {
@@ -381,7 +378,7 @@ export default function compiler ({store, bus, config, pathMapping}) {
         ])
       }
       const removeChild = index => {
-        let childPath = contentsPath.push(index)
+        let childPath = childrenPath.push(index)
 
         return store.batchDispatch([
           manyChildFormsActions.removeChild(childPath),
@@ -409,7 +406,6 @@ export default function compiler ({store, bus, config, pathMapping}) {
           namePath,
           store,
           bus,
-          contentsPath,
           name,
           type,
           errors,

@@ -79,6 +79,40 @@ export default function reducer (state, action) {
       return state
     }
 
+    case types.REMOVE_MANY_CHILD_FORMS_CHILD: {
+      return state.deleteIn(action.path)
+    }
+
+    case types.EDIT_MANY_CHILD_FORMS_CHILDREN: {
+      let childrenPath = action.path.concat([schemaMapping.manyChildForms.children])
+      return state.updateIn(childrenPath, action.children)
+    }
+
+    case types.REORDER_MANY_CHILD_FORMS_CHILDREN: {
+      let path = action.path.concat([schemaMapping.manyChildForms.children])
+      let children = state.getIn(path)
+      let updatedChildren = Immutable.fromJS(action.order).map((index) => (
+        children.get(index)
+      ))
+      return state.setIn(path, updatedChildren)
+    }
+
+    case types.VALIDATE_MANY_CHILD_FORMS: {
+      if (action.validate) {
+        let errorsPath = action.path.concat([schemaMapping.manyChildForms.errors])
+        let childrenPath = action.path.concat([schemaMapping.manyChildForms.children])
+        let children = state.getIn(childrenPath)
+
+        return state.updateIn(errorsPath, (val) => {
+          // Run contents through the validator function
+          return Immutable.fromJS(
+            action.validate(children.toJS())
+          )
+        })
+      }
+      return state
+    }
+
     default: {
       return state
     }
