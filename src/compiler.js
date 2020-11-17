@@ -443,6 +443,30 @@ export default function compiler ({store, bus, config, pathMapping}) {
       })
     },
 
+    visitFormField ({path, namePath, definition}) {
+      let key = path.hashCode()
+      let hashCode = definition.hashCode()
+      let type = definition.get(schemaMapping.formField.type)
+      let name = definition.get(schemaMapping.formField.name)
+      let attributes = compileAttributes(
+        definition.get(schemaMapping.formField.attributes)
+      )
+      let children = definition.get(schemaMapping.formField.children)
+      path = path.push(schemaMapping.formField.children)
+      let FormField = config.get('formField')
+      if (typeof FormField !== 'function') {
+        throw new Error('Expected the FormField handler to be a function.')
+      }
+      return FormField({
+        key,
+        hashCode,
+        name,
+        type,
+        attributes,
+        children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
+      })
+    },
+
     /**
      * Called for each node that identifies as an 'section'. Sections are
      * thought of as strong top-level (though they can be nested) wrappers for

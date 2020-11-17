@@ -54,6 +54,12 @@ const schemaMapping = {
     attributes: 3,
     children: 4,
   },
+  formField: {
+    name: 0,
+    type: 1,
+    children: 2,
+    attributes: 3
+  },
   section: {
     name: 0,
     type: 1,
