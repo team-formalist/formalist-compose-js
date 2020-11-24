@@ -84,29 +84,29 @@ export default function reducer (state, action) {
     }
 
     case types.EDIT_MANY_CHILD_FORMS_CHILDREN: {
-      let childrenPath = action.path.concat([schemaMapping.manyChildForms.children])
-      return state.updateIn(childrenPath, action.children)
+      let contentsPath = action.path.concat([schemaMapping.manyChildForms.contents])
+      return state.updateIn(contentsPath, action.children)
     }
 
     case types.REORDER_MANY_CHILD_FORMS_CHILDREN: {
-      let path = action.path.concat([schemaMapping.manyChildForms.children])
-      let children = state.getIn(path)
-      let updatedChildren = Immutable.fromJS(action.order).map((index) => (
-        children.get(index)
+      let contentsPath = action.path.concat([schemaMapping.manyChildForms.contents])
+      let contents = state.getIn(contentsPath)
+      let updatedContents = Immutable.fromJS(action.order).map((index) => (
+        contents.get(index)
       ))
-      return state.setIn(path, updatedChildren)
+      return state.setIn(contentsPath, updatedContents)
     }
 
     case types.VALIDATE_MANY_CHILD_FORMS: {
       if (action.validate) {
         let errorsPath = action.path.concat([schemaMapping.manyChildForms.errors])
-        let childrenPath = action.path.concat([schemaMapping.manyChildForms.children])
-        let children = state.getIn(childrenPath)
+        let contentsPath = action.path.concat([schemaMapping.manyChildForms.contents])
+        let contents = state.getIn(contentsPath)
 
         return state.updateIn(errorsPath, (val) => {
           // Run contents through the validator function
           return Immutable.fromJS(
-            action.validate(children.toJS())
+            action.validate(contents.toJS())
           )
         })
       }

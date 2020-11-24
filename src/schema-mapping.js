@@ -52,7 +52,7 @@ const schemaMapping = {
     type: 1,
     errors: 2,
     attributes: 3,
-    children: 4,
+    contents: 4,
   },
   formField: {
     name: 0,

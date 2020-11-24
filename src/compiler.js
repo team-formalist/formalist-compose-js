@@ -353,17 +353,18 @@ export default function compiler ({store, bus, config, pathMapping}) {
       let attributes = compileAttributes(
         definition.get(schemaMapping.manyChildForms.attributes)
       )
-      let children = definition.get(schemaMapping.manyChildForms.children)
-      let childrenPath = path.push(schemaMapping.manyChildForms.children)
-      if (!children) return
-
-      namePath = appendNamePath(namePath, name)
-      if (!children) return
+      let contents = definition.get(schemaMapping.manyChildForms.contents)
+      let contentsPath = path.push(schemaMapping.manyChildForms.contents)
+      let children = contents.map((node, index) => {
+        let childNamePath = appendNamePath(namePath, index)
+        return visit.call(this, {path: contentsPath, namePath: childNamePath, node, index})
+      })
 
       let ManyChildForms = config.get('manyChildForms')
       if (typeof ManyChildForms !== 'function') {
         throw new Error('Expected the manyChildForms handler to be a function.')
       }
+      pathMapping[namePath] = path
 
       // Extract validation rules
       const validationRules = attributes.get('validation')
@@ -371,14 +372,14 @@ export default function compiler ({store, bus, config, pathMapping}) {
       : null
 
       // Create methods to pass
-      const addChild = (formName) => {
+      const addChild = () => {
         return store.batchDispatch([
-          manyChildFormsActions.addChild(path, formName),
+          manyChildFormsActions.addChild(path),
           manyChildFormsActions.validate(path, validation(validationRules)),
         ])
       }
       const removeChild = index => {
-        let childPath = childrenPath.push(index)
+        let childPath = contentsPath.push(index)
 
         return store.batchDispatch([
           manyChildFormsActions.removeChild(childPath),
@@ -406,15 +407,16 @@ export default function compiler ({store, bus, config, pathMapping}) {
           namePath,
           store,
           bus,
+          contentsPath,
           name,
           type,
           errors,
           attributes,
+          children,
           addChild,
           removeChild,
           reorderChildren,
           editChildren,
-          children: children.map((node, index) => visit.call(this, {path, namePath, node, index})),
         })
       )
     },
@@ -428,6 +430,7 @@ export default function compiler ({store, bus, config, pathMapping}) {
         definition.get(schemaMapping.childForm.attributes)
       )
       let children = definition.get(schemaMapping.childForm.children)
+      namePath = appendNamePath(namePath, name)
       path = path.push(schemaMapping.childForm.children)
       let ChildForm = config.get('childForm')
       if (typeof ChildForm !== 'function') {
