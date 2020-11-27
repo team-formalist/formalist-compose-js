@@ -372,9 +372,9 @@ export default function compiler ({store, bus, config, pathMapping}) {
       : null
 
       // Create methods to pass
-      const addChild = () => {
+      const addChild = (formName, form) => {
         return store.batchDispatch([
-          manyChildFormsActions.addChild(path),
+          manyChildFormsActions.addChild(path, formName, form),
           manyChildFormsActions.validate(path, validation(validationRules)),
         ])
       }

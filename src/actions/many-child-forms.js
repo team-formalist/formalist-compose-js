@@ -1,7 +1,7 @@
 import * as types from '../constants/action-types'
 
-export function addChild (path, formName) {
-  return { type: types.ADD_MANY_CHILD_FORMS_CHILD, path, formName }
+export function addChild (path, formName, form) {
+  return { type: types.ADD_MANY_CHILD_FORMS_CHILD, path, formName, form }
 }
 
 export function removeChild (path) {

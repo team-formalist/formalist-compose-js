@@ -79,6 +79,26 @@ export default function reducer (state, action) {
       return state
     }
 
+    case types.ADD_MANY_CHILD_FORMS_CHILD: {
+      let contentsPath = action.path.concat([schemaMapping.manyChildForms.contents])
+      let contents = state.getIn(contentsPath)
+
+
+      // TODO : fix this
+      let child = [
+        "child_form",
+        [
+          action.formName,
+          "child_form",
+          action.form.get("form"),
+          action.form.get("attributes_template")
+        ]
+      ]
+
+      contents = contents.push(Immutable.fromJS(child))
+      return state.setIn(contentsPath, contents)
+    }
+
     case types.REMOVE_MANY_CHILD_FORMS_CHILD: {
       return state.deleteIn(action.path)
     }
