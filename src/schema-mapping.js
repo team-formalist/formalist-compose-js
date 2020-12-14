@@ -45,9 +45,9 @@ const schemaMapping = {
     name: 0,
     type: 1,
     children: 2,
-    attributes: 3
+    attributes: 3,
   },
-  manyChildForms: {
+  manyForms: {
     name: 0,
     type: 1,
     errors: 2,
@@ -58,7 +58,7 @@ const schemaMapping = {
     name: 0,
     type: 1,
     children: 2,
-    attributes: 3
+    attributes: 3,
   },
   section: {
     name: 0,
@@ -77,6 +77,6 @@ const schemaMapping = {
     },
     value: 0,
   },
-}
+};
 
-export default schemaMapping
+export default schemaMapping;
