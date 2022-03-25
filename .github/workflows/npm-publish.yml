@@ -1,8 +1,10 @@
 name: publish
 on:
   push:
-    tags:
-      - 'v[0-9]+.[0-9]+.[0-9]+*'
+    # tags:
+    #   - 'v[0-9]+.[0-9]+.[0-9]+*'
+    branches:
+      - "nr/npm-publish-github-action"
 jobs:
   build:
     runs-on: ubuntu-latest
