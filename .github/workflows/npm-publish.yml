@@ -6,7 +6,7 @@ on:
     branches:
       - "nr/npm-publish-github-action"
 jobs:
-  build:
+  npm-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -18,7 +18,7 @@ jobs:
       - name: Install package dependencies
         run: yarn install --frozen-lockfile
       - name: Build project
-        run: yarn run compile
+        run: yarn run build
       - name: Publish to npm
         run: npm publish --dry-run
         env:
