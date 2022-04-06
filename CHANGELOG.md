@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+# v3.1.0 2022-04-06
+
+* This adds support for ManyForms fields, the primary PR for which is here: team-formalist/formalist-rb#93  It adds support for adding, re-ordering and removing the children of many forms fields.
+
 # v3.0.2 2018-11-27
 
 * Upgrade `nodemon` to avoid `event-stream` and `flatmap-stream` security issue
